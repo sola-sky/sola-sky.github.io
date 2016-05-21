@@ -116,7 +116,7 @@ Hexo
 
 
 然后Hexo随后会自动在目标文件">
-<meta property="og:updated_time" content="2016-05-21T09:34:34.503Z">
+<meta property="og:updated_time" content="2016-05-21T09:38:14.166Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Li's Blog">
 <meta name="twitter:description" content="May 21, 2016 9:31 AM
@@ -208,7 +208,7 @@ Hexo
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -218,7 +218,7 @@ Hexo
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -281,7 +281,7 @@ Hexo
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-05-21T17:18:19+08:00" content="2016-05-21">
               2016-05-21
             </time>
@@ -329,11 +329,11 @@ Hexo
 <li><h4 id="配置GitHub"><a href="#配置GitHub" class="headerlink" title="配置GitHub"></a>配置GitHub</h4><p>1.登陆github后new一个Repository，该repository的名字必须为username.github.io，这是固定格式。因为github pages分两种，一种就是github用户建立的用户&amp;组织页（站）这样的，另一种是依附于项目的pages。</p>
 </li>
 <li><h4 id="建立hexo和github的关联"><a href="#建立hexo和github的关联" class="headerlink" title="建立hexo和github的关联"></a>建立hexo和github的关联</h4><p>1.在本地文件_config.yml文件最后加入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"><span class="built_in">type</span>:git</span><br><span class="line">repo:你的repository https的地址</span><br><span class="line">branch:master</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"><span class="built_in">type</span>: git</span><br><span class="line">repo: 你的repository https的地址</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>2.然后执行命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-get --save</span><br></pre></td></tr></table></figure></p>
-<p>3.最后执行部署命令：<code>hexo deploy</code><br><strong>这条命令很重要，不然 <code>hexo deploy</code>时会提示错误，无法解析git，对了type:一定是git,不是github。</strong><br><strong>对了 repo中的地址用 SSH，不要用HTTPS，用HTTPS不知道为什么就行不行，可能是哪里配置有问题没有加密码什么的吧</strong><br><strong>有问题可以看<a href="https://hexo.io/docs/" target="_blank" rel="external">这个网站,是hexo的官网，有文档</a></strong></p>
+<p>3.最后执行部署命令：<code>hexo deploy</code><br><strong>这条命令很重要，不然 <code>hexo deploy</code>时会提示错误，无法解析git，对了type: 一定是git,不是github,还要注意空格。</strong><br><strong>对了 repo中的地址用 SSH，不要用HTTPS，用HTTPS不知道为什么就行不行，可能是哪里配置有问题没有加密码什么的吧</strong><br><strong>有问题可以看<a href="https://hexo.io/docs/" target="_blank" rel="external">这个网站,是hexo的官网，有文档</a></strong></p>
 <ul>
 <li><h4 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h4>1.在根目录下修改_config.yml文件中的theme属性就可以了，将其设置为themes目录下的一个目录名字就行。然后执行部署。</li>
 </ul>
@@ -403,10 +403,10 @@ Hexo
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -423,7 +423,7 @@ Hexo
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">1</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -481,7 +481,7 @@ Hexo
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
