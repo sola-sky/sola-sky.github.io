@@ -1,0 +1,562 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="May 20, 2016 7:14 AM接下来我们回头看shouldInterceptTouchEvent()方法。当子View消费了事件的时候，就是无法使用processTouchEvent()方法了在OnTouchEvent里。除非你将processTouchEvent()方法放到其他地方执行。12345678910111213141516171819202122232425262728293">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Li's Blog">
+<meta property="og:url" content="http://solasky.info/2016/05/20/shouldInterceptTouchEvent/index.html">
+<meta property="og:site_name" content="Li's Blog">
+<meta property="og:description" content="May 20, 2016 7:14 AM接下来我们回头看shouldInterceptTouchEvent()方法。当子View消费了事件的时候，就是无法使用processTouchEvent()方法了在OnTouchEvent里。除非你将processTouchEvent()方法放到其他地方执行。12345678910111213141516171819202122232425262728293">
+<meta property="og:updated_time" content="2016-05-26T00:05:49.921Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Li's Blog">
+<meta name="twitter:description" content="May 20, 2016 7:14 AM接下来我们回头看shouldInterceptTouchEvent()方法。当子View消费了事件的时候，就是无法使用processTouchEvent()方法了在OnTouchEvent里。除非你将processTouchEvent()方法放到其他地方执行。12345678910111213141516171819202122232425262728293">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title>  | Li's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Li's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-05-20T08:04:17+08:00" content="2016-05-20">
+              2016-05-20
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>May 20, 2016 7:14 AM<br>接下来我们回头看<code>shouldInterceptTouchEvent()</code>方法。<br>当子View消费了事件的时候，就是无法使用<code>processTouchEvent()</code>方法了在OnTouchEvent里。除非你将<code>processTouchEvent()</code>方法放到其他地方执行。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_MOVE: &#123;</span><br><span class="line">                <span class="keyword">if</span> (mInitialMotionX == <span class="keyword">null</span> || mInitialMotionY == <span class="keyword">null</span>) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// First to cross a touch slop over a draggable view wins. Also report edge drags.</span></span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">int</span> pointerCount = MotionEventCompat.getPointerCount(ev);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pointerCount; i++) &#123;</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">int</span> pointerId = MotionEventCompat.getPointerId(ev, i);</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">float</span> x = MotionEventCompat.getX(ev, i);</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">float</span> y = MotionEventCompat.getY(ev, i);</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">float</span> dx = x - mInitialMotionX[pointerId];</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">float</span> dy = y - mInitialMotionY[pointerId];</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">final</span> View toCapture = findTopChildUnder((<span class="keyword">int</span>) x, (<span class="keyword">int</span>) y);</span><br><span class="line">重点<span class="number">1</span>                    <span class="keyword">final</span> <span class="keyword">boolean</span> pastSlop = toCapture != <span class="keyword">null</span> &amp;&amp; checkTouchSlop(toCapture, dx, dy);</span><br><span class="line">                    <span class="keyword">if</span> (pastSlop) &#123;</span><br><span class="line">                        <span class="comment">// check the callback's</span></span><br><span class="line">                        <span class="comment">// getView[Horizontal|Vertical]DragRange methods to know</span></span><br><span class="line">                        <span class="comment">// if you can move at all along an axis, then see if it</span></span><br><span class="line">                        <span class="comment">// would clamp to the same value. If you can't move at</span></span><br><span class="line">                        <span class="comment">// all in every dimension with a nonzero range, bail.</span></span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> oldLeft = toCapture.getLeft();</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> targetLeft = oldLeft + (<span class="keyword">int</span>) dx;</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> newLeft = mCallback.clampViewPositionHorizontal(toCapture,</span><br><span class="line">                                targetLeft, (<span class="keyword">int</span>) dx);</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> oldTop = toCapture.getTop();</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> targetTop = oldTop + (<span class="keyword">int</span>) dy;</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> newTop = mCallback.clampViewPositionVertical(toCapture, targetTop,</span><br><span class="line">                                (<span class="keyword">int</span>) dy);</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> horizontalDragRange = mCallback.getViewHorizontalDragRange(</span><br><span class="line">                                toCapture);</span><br><span class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> verticalDragRange = mCallback.getViewVerticalDragRange(toCapture);</span><br><span class="line">                        <span class="keyword">if</span> ((horizontalDragRange == <span class="number">0</span> || horizontalDragRange &gt; <span class="number">0</span></span><br><span class="line">                                &amp;&amp; newLeft == oldLeft) &amp;&amp; (verticalDragRange == <span class="number">0</span></span><br><span class="line">                                || verticalDragRange &gt; <span class="number">0</span> &amp;&amp; newTop == oldTop)) &#123;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    reportNewEdgeDrags(dx, dy, pointerId);</span><br><span class="line">                    <span class="keyword">if</span> (mDragState == STATE_DRAGGING) &#123;</span><br><span class="line">                        <span class="comment">// Callback might have started an edge drag</span></span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (pastSlop &amp;&amp; tryCaptureViewForDrag(toCapture, pointerId)) &#123;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                saveLastMotion(ev);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure></p>
+<p>感觉跟<code>processTouchEvent()</code>方法里的Move在没有被设置为拖拽状态的时候有点像。<br>我们看看标记为重点1的地方，<code>final boolean pastSlop = toCapture != null &amp;&amp; checkTouchSlop(toCapture, dx, dy);</code> 这里重点的代码为<code>checkTouchSlop(toCapture, dx, dy)</code>，跟在<code>processTouchEvent()</code>里是一样的，为了方便查看，再次上代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">checkTouchSlop</span><span class="params">(View child, <span class="keyword">float</span> dx, <span class="keyword">float</span> dy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (child == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> checkHorizontal = mCallback.getViewHorizontalDragRange(child) &gt; <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> checkVertical = mCallback.getViewVerticalDragRange(child) &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (checkHorizontal &amp;&amp; checkVertical) &#123;</span><br><span class="line">        <span class="keyword">return</span> dx * dx + dy * dy &gt; mTouchSlop * mTouchSlop;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (checkHorizontal) &#123;</span><br><span class="line">        <span class="keyword">return</span> Math.abs(dx) &gt; mTouchSlop;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (checkVertical) &#123;</span><br><span class="line">        <span class="keyword">return</span> Math.abs(dy) &gt; mTouchSlop;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中主要是使用<code>Callback</code>里的的<code>getViewVerticalDragRange()</code>和<code>getViewHorizontalDragRange()</code>方法，只要其返回值大于0就行，默认的情况下是返回0的，所以当子View消费事件时，如果你也想让其可拖拽，就必须在重写两个方法里，并将其设置大于0。<br>返回move里的代码<code>if ((horizontalDragRange == 0 || horizontalDragRange &gt; 0
+                                &amp;&amp; newLeft == oldLeft) &amp;&amp; (verticalDragRange == 0
+                                || verticalDragRange &gt; 0 &amp;&amp; newTop == oldTop)) {
+                            break;
+                        }</code><br>这里说明了只要有一个手指无法使其移动，那么其他手指也是一样的，没必要再尝试其他手指使其移动，这是无用功，因为不可能出现食指可以使其移动，而中指无法使其移动的这种情况。<br><strong>当然还有注意里面的break，也就是说只要出现一根手指能移动的情况，就不需要再判断其他的手指了（在每次move中）</strong><br><strong>shouldInterceptTouchEvent中的move少了processTouchEvent事件中的dragTo()，也就是说不需要在move一开始时进行<code>if (mDragState == STATE_DRAGGING)</code>这样的判断，因为拖拽是交给processTouchEvent的</strong></p>
+<p><strong>还有关于<code>getViewVerticalDragRange()</code>和<code>getViewHorizontalDragRange()</code>方法，如果你想在第一次点击时没有点到可拖拽的view，但是想在移动过程中如果触碰到可以拖拽的view，这时你想让其跟着手指移动，那么这两个方法必须返回大于0.如果你不想在手指移动过程中触碰到的view跟着手指移动，那么就必须为0。下面为processTouchEvent的move：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> MotionEvent.ACTION_MOVE: &#123;</span><br><span class="line">    <span class="keyword">if</span> (mDragState == STATE_DRAGGING) &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> x = MotionEventCompat.getX(ev, index);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> y = MotionEventCompat.getY(ev, index);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> idx = (<span class="keyword">int</span>) (x - mLastMotionX[mActivePointerId]);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> idy = (<span class="keyword">int</span>) (y - mLastMotionY[mActivePointerId]);</span><br><span class="line"></span><br><span class="line">        dragTo(mCapturedView.getLeft() + idx, mCapturedView.getTop() + idy, idx, idy);</span><br><span class="line"></span><br><span class="line">        saveLastMotion(ev);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Check to see if any pointer is now over a draggable view.</span></span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> pointerCount = MotionEventCompat.getPointerCount(ev);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pointerCount; i++) &#123;</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> pointerId = MotionEventCompat.getPointerId(ev, i);</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">float</span> x = MotionEventCompat.getX(ev, i);</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">float</span> y = MotionEventCompat.getY(ev, i);</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">float</span> dx = x - mInitialMotionX[pointerId];</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">float</span> dy = y - mInitialMotionY[pointerId];</span><br><span class="line"></span><br><span class="line">            reportNewEdgeDrags(dx, dy, pointerId);</span><br><span class="line">            <span class="keyword">if</span> (mDragState == STATE_DRAGGING) &#123;</span><br><span class="line">                <span class="comment">// Callback might have started an edge drag.</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">final</span> View toCapture = findTopChildUnder((<span class="keyword">int</span>) x, (<span class="keyword">int</span>) y);</span><br><span class="line">            <span class="keyword">if</span> (checkTouchSlop(toCapture, dx, dy) &amp;&amp;</span><br><span class="line">                    tryCaptureViewForDrag(toCapture, pointerId)) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        saveLastMotion(ev);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>挑出证明上述观点的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> View toCapture = findTopChildUnder((<span class="keyword">int</span>) x, (<span class="keyword">int</span>) y);</span><br><span class="line">                        <span class="keyword">if</span> (checkTouchSlop(toCapture, dx, dy) &amp;&amp;</span><br><span class="line">                                tryCaptureViewForDrag(toCapture, pointerId)) &#123;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>因为<code>checkTouchSlop()</code>方法只有<code>getViewVerticalDragRange()</code>和<code>getViewHorizontalDragRange()</code>大于0时才有可能返回true。</strong></p>
+<p><code>shouldInterceptTouchEvent()</code>与<code>processTouchEvent()</code>不同之处在于没有<code>dragTo()</code>和多了以下代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (pastSlop) &#123;</span><br><span class="line">    <span class="comment">// check the callback's</span></span><br><span class="line">    <span class="comment">// getView[Horizontal|Vertical]DragRange methods to know</span></span><br><span class="line">    <span class="comment">// if you can move at all along an axis, then see if it</span></span><br><span class="line">    <span class="comment">// would clamp to the same value. If you can't move at</span></span><br><span class="line">    <span class="comment">// all in every dimension with a nonzero range, bail.</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> oldLeft = toCapture.getLeft();</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> targetLeft = oldLeft + (<span class="keyword">int</span>) dx;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> newLeft = mCallback.clampViewPositionHorizontal(toCapture,</span><br><span class="line">            targetLeft, (<span class="keyword">int</span>) dx);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> oldTop = toCapture.getTop();</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> targetTop = oldTop + (<span class="keyword">int</span>) dy;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> newTop = mCallback.clampViewPositionVertical(toCapture, targetTop,</span><br><span class="line">            (<span class="keyword">int</span>) dy);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> horizontalDragRange = mCallback.getViewHorizontalDragRange(</span><br><span class="line">            toCapture);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> verticalDragRange = mCallback.getViewVerticalDragRange(toCapture);</span><br><span class="line">    <span class="keyword">if</span> ((horizontalDragRange == <span class="number">0</span> || horizontalDragRange &gt; <span class="number">0</span></span><br><span class="line">            &amp;&amp; newLeft == oldLeft) &amp;&amp; (verticalDragRange == <span class="number">0</span></span><br><span class="line">            || verticalDragRange &gt; <span class="number">0</span> &amp;&amp; newTop == oldTop)) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为当down被子view消费了，如果点击的view是无法移动的，或者移动不够，那么就没必要再判断下去了，可以break了，也就是说没必要进行reportNewEdgeDrags(dx, dy, pointerId)和tryCaptureViewForDrag(toCapture, pointerId)，因为view根本无法移动。可以让view继续消费move事件。但是processTouchEvent里就不同，因为没有子view消费事件，reportNewEdgeDrags(dx, dy, pointerId)还是有必要做的，说不定是该操作就是为了拉出侧边栏或者移动在移动手指过程中触碰到的view。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/22/github+hexo/" rel="prev" title="Github + Hexo">
+                Github + Hexo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
+               alt="sola_sky" />
+          <p class="site-author-name" itemprop="name">sola_sky</p>
+          <p class="site-description motion-element" itemprop="description">学习记录和总结</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  Sat May 21 2016 08:00:00 GMT+0800 (中国标准时间) - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sola_sky</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
