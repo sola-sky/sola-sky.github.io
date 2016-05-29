@@ -170,7 +170,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -180,7 +180,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -233,6 +233,193 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/29/手势事件被重叠的下层消费解决思路/" itemprop="url">
+                  手势事件被重叠的下层消费解决思路
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-05-29T17:56:07+08:00" content="2016-05-29">
+              2016-05-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在仿造网易云音乐app的底部弹出框效果，实际开发中遇到了一个问题，就是当手势事件按在上层时（本文中说的上层和下层是同级关系的ViewGroup，例如DrawLayout中的两个子布局），由于上层的子view和其本身ViewGroup都没有消费事件，所以touchEvent被传到下层进行消费了（由于上层从底部弹出来覆盖在了下层之上，所以区域重叠了）。<br>但是我想要的顺序不是这样的，我想要是事件没有被上层消费时，直接让其parent View消费，而不是传给下层。一开始以为DrawLayout有实现，然后傻傻的看源码，最后通过实践写了一个DrawLayout的activity，发现也一样，事件也是被下层消费了。<br>然后现在想了一个办法，拖拽事件我只想让TextView被按下时才触发，TextView下面的ListView按照其原来的方式消费touchEvent。所以在最顶层ViewGroup（类似DrawLayout）中拦截事件时进行判断，如果手指按在了TextView区域内，则拦截事件，不让其往子view传递事件，这样事件就会传到最顶层自己的onTouchEvent中了，这样就可以实现拖拽，而不是被下层view消费了。<br>还有为了阻止事件传递给下层，可以为上层添加<code>clickable=true</code>这个属性，这个属性一添加，事件如果没有被其子View消费，那么就会被自己消费，虽然啥都没写，但是其onTouchEvent会返回true，这样就可以阻止事件继续传递，于是就不会传给下层了，但同时也不会传给其parent View也就是自定义的那个底部弹出框布局。但是前面我们已经为按到TextView时的事件进行拦截，所以自定义底部弹出框依然是可以拖拽的，只要你按到了TextView，其他区域不需要拖拽，其他区域只要正常消费事件就行了，因为其他区域就只有一个可以上下拉进行数据加载的Listview。<br><strong>补充一下，ViewDragHelper里的getViewHorizontalDragRange()必须返回0，否则在进行滑动时，自定义底部弹出框会阻止事件往子View传递，于是上下拉加载数据操作就无法实现了</strong></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/29/如何搜索/" itemprop="url">
+                  如何搜索
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-05-29T17:46:47+08:00" content="2016-05-29">
+              2016-05-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/22/drawable微技巧学习记录/" itemprop="url">
                   drawable微技巧学习记录
                 </a>
@@ -246,7 +433,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-22T21:12:01+08:00" content="2016-05-22">
               2016-05-22
             </time>
@@ -418,7 +605,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-22T14:30:28+08:00" content="2016-05-22">
               2016-05-22
             </time>
@@ -594,7 +781,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-22T09:31:11+08:00" content="2016-05-22">
               2016-05-22
             </time>
@@ -606,7 +793,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/hexo/" itemprop="url" rel="index">
@@ -728,7 +915,7 @@
               
                 
                 <a class="post-title-link" href="/2016/05/20/shouldInterceptTouchEvent/" itemprop="url">
-                  Untitled
+                  Unbenannt
                 </a>
               
             
@@ -740,7 +927,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-20T08:04:17+08:00" content="2016-05-20">
               2016-05-20
             </time>
@@ -855,8 +1042,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -864,7 +1051,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -873,7 +1060,7 @@
             <div class="site-state-item site-state-tags">
               <a href="/tags">
                 <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               </a>
             </div>
           
@@ -917,7 +1104,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
