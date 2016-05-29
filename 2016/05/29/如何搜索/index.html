@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="搜索," />
 
 
 
@@ -84,16 +84,22 @@
 
 
 
-<meta name="description" content="学习记录和总结">
+<meta name="description" content="双引号把搜索词放在双引号中，代表完全匹配搜索，也就是说搜索结果返回的页面包含双引号中出现的所有的词，连顺序也必须完全匹配。bd和Google 都支持这个指令。例如搜索： “seo方法图片”
+
+减号减号代表搜索不包含减号后面的词的页面。使用这个指令时减号前面必须是空格，减号后面没有空格，紧跟着需要排除的词。Google 和bd都支持这个指令。例如：搜索 -引擎返回的则是包含“搜索”这个词，却不包含">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何搜索">
 <meta property="og:url" content="http://solasky.info/2016/05/29/如何搜索/index.html">
 <meta property="og:site_name" content="Li's Blog">
-<meta property="og:description" content="学习记录和总结">
-<meta property="og:updated_time" content="2016-05-29T09:46:47.297Z">
+<meta property="og:description" content="双引号把搜索词放在双引号中，代表完全匹配搜索，也就是说搜索结果返回的页面包含双引号中出现的所有的词，连顺序也必须完全匹配。bd和Google 都支持这个指令。例如搜索： “seo方法图片”
+
+减号减号代表搜索不包含减号后面的词的页面。使用这个指令时减号前面必须是空格，减号后面没有空格，紧跟着需要排除的词。Google 和bd都支持这个指令。例如：搜索 -引擎返回的则是包含“搜索”这个词，却不包含">
+<meta property="og:updated_time" content="2016-05-29T13:41:40.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何搜索">
-<meta name="twitter:description" content="学习记录和总结">
+<meta name="twitter:description" content="双引号把搜索词放在双引号中，代表完全匹配搜索，也就是说搜索结果返回的页面包含双引号中出现的所有的词，连顺序也必须完全匹配。bd和Google 都支持这个指令。例如搜索： “seo方法图片”
+
+减号减号代表搜索不包含减号后面的词的页面。使用这个指令时减号前面必须是空格，减号后面没有空格，紧跟着需要排除的词。Google 和bd都支持这个指令。例如：搜索 -引擎返回的则是包含“搜索”这个词，却不包含">
 
 
 
@@ -169,7 +175,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -179,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -242,7 +248,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-05-29T17:46:47+08:00" content="2016-05-29">
               2016-05-29
             </time>
@@ -271,7 +277,51 @@
       
 
       
-        
+        <ul>
+<li><p><strong>双引号</strong><br>把搜索词放在双引号中，代表完全匹配搜索，也就是说搜索结果返回的页面包含双引号中出现的所有的词，连顺序也必须完全匹配。bd和Google 都支持这个指令。例如搜索： “seo方法图片”</p>
+</li>
+<li><p><strong>减号</strong><br>减号代表搜索不包含减号后面的词的页面。使用这个指令时减号前面必须是空格，减号后面没有空格，紧跟着需要排除的词。Google 和bd都支持这个指令。<br>例如：搜索 -引擎<br>返回的则是包含“搜索”这个词，却不包含“引擎”这个词的结果。</p>
+</li>
+<li><p><strong>星号</strong><br>星号<em>是常用的通配符，也可以用在搜索中。百度不支持</em>号搜索指令。<br>比如在Google 中搜索：搜索<em>擎<br>其中的</em>号代表任何文字。返回的结果就不仅包含“搜索引擎”，还包含了“搜索收擎”，“搜索巨擎”等内容。</p>
+</li>
+<li><p><strong>inurl</strong><br>inurl: 指令用于搜索查询词出现在url 中的页面。bd和Google 都支持inurl 指令。inurl 指令支持中文和英文。<br>比如搜索：inurl:搜索引擎优化<br>返回的结果都是网址url 中包含“搜索引擎优化”的页面。由于关键词出现在url 中对排名有一定影响，使用inurl:搜索可以更准确地找到竞争对手。</p>
+</li>
+<li><p><strong>inanchor</strong><br>inanchor:指令返回的结果是导入链接锚文字中包含搜索词的页面。百度不支持inanchor。<br>比如在Google 搜索 ：inanchor:点击这里<br>返回的结果页面本身并不一定包含“点击这里”这四个字，而是指向这些页面的链接锚文字中出现了“点击这里”这四个字。<br>可以用来找到某个关键词的竞争对收，而且这些竞争对手往往是做过SEO 的。研究竞争对手页面有哪些外部链接，就可以找到很多链接资源。</p>
+</li>
+<li><p><strong>intitle</strong><br>intitle: 指令返回的是页面title 中包含关键词的页面。Google 和bd都支持intitle 指令。<br>使用intitle 指令找到的文件是更准确的竞争页面。如果关键词只出现在页面可见文字中，而没有出现在title 中，大部分情况是并没有针对关键词进行优化，所以也不是有力的竞争对手。</p>
+</li>
+<li><p><strong>allintitle</strong><br>allintitle:搜索返回的是页面标题中包含多组关键词的文件。<br>例如 ：allintitle:SEO 搜索引擎优化<br>就相当于：intitle:SEO intitle:搜索引擎优化<br>返回的是标题中中既包含“SEO”，也包含“搜索引擎优化”的页面</p>
+</li>
+<li><p><strong>allinurl</strong><br>与allintitle: 类似。<br>allinurl:SEO 搜索引擎优化<br>就相当于 ：inurl:SEO inurl:搜索引擎优化</p>
+</li>
+<li><p><strong>filetype</strong><br>用于搜索特定文件格式。Google 和bd都支持filetype 指令。<br>比如搜索filetype:pdf SEO<br>返回的就是包含SEO 这个关键词的所有pdf 文件。</p>
+</li>
+<li><p><strong>site</strong><br>site:是SEO 最熟悉的高级搜索指令，用来搜索某个域名下的所有文件。</p>
+</li>
+<li><p><strong>related</strong><br>related:指令只适用于Google，返回的结果是与某个网站有关联的页面。比如搜索<br>related:<a href="http://cnseotool.com" target="_blank" rel="external">http://cnseotool.com</a><br>我们就可以得到Google 所认为的与点石网站有关联的其他页面。 这种关联到底指的是什么，Google 并没有明确说明，一般认为指的是有共同外部链接的网站。</p>
+</li>
+<li><p><strong>~</strong><br>同时搜索近义词，比如“higher education”和“university”</p>
+</li>
+<li><p><strong>..</strong><br>显示指定时间段内的搜素结果</p>
+</li>
+<li><p><strong>author</strong><br>搜素某个作者</p>
+</li>
+<li><p><strong>define</strong><br>了解字词定义</p>
+</li>
+<li><p><strong>+,-,*,/</strong><br>快速进行数学计算</p>
+</li>
+<li><p><strong>=?</strong><br>单位换算，比如54磅=? 公斤</p>
+</li>
+<li><p><strong>Ctrl+L</strong><br>快速选中浏览器地址栏</p>
+</li>
+<li><p><strong>info</strong><br>来显示与某链接相关的一系列搜寻，提供cache 、link 、related 和完全包含该链接的网页的功能。</p>
+</li>
+<li><p><strong>大写OR</strong><br>表示逻辑或</p>
+</li>
+</ul>
+<p><strong>记住搜索前自己做好分词工作，搜索引擎干的最基本的事情其实就是分词匹配，所以不要加入一些无用的关键字，不要用句子，不要用日常用语，使用最简单的关键字，结合上述语法</strong></p>
+<p><a href="https://www.zhihu.com/question/20161362" target="_blank" rel="external"><strong>知识点来自知乎</strong></a></p>
+
       
     </div>
 
@@ -289,6 +339,12 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/搜索/" rel="tag">#搜索</a>
+          
+        </div>
       
 
       
@@ -354,10 +410,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -374,7 +430,7 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">6</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -382,7 +438,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -390,8 +446,8 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">tags</span>
               </a>
             </div>
           
@@ -419,7 +475,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
             
           </div>
         </section>
@@ -446,7 +502,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
