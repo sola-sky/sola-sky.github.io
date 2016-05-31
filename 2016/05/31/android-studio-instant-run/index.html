@@ -84,15 +84,31 @@
 
 
 
-<meta name="description" content="学习记录和总结">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Li's Blog">
-<meta property="og:url" content="http://solasky.info/tags/搜索/index.html">
+<meta name="description" content="###记录有关Instant Run的学习郭霖的原文——《你真的了解Instant Run吗？》
+Instant Run主要分为三种类型，hot swap、warm swap和cold swap，Android Studio会根据代码的修改情况自动选择使用哪种swap类型。
+
+Hot Swap
+
+hot swap的适用条件比较少，只有一种情况会被Android Studio视为hot swap类型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android studio instant run">
+<meta property="og:url" content="http://solasky.info/2016/05/31/android-studio-instant-run/index.html">
 <meta property="og:site_name" content="Li's Blog">
-<meta property="og:description" content="学习记录和总结">
+<meta property="og:description" content="###记录有关Instant Run的学习郭霖的原文——《你真的了解Instant Run吗？》
+Instant Run主要分为三种类型，hot swap、warm swap和cold swap，Android Studio会根据代码的修改情况自动选择使用哪种swap类型。
+
+Hot Swap
+
+hot swap的适用条件比较少，只有一种情况会被Android Studio视为hot swap类型">
+<meta property="og:updated_time" content="2016-05-31T00:03:35.859Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Li's Blog">
-<meta name="twitter:description" content="学习记录和总结">
+<meta name="twitter:title" content="android studio instant run">
+<meta name="twitter:description" content="###记录有关Instant Run的学习郭霖的原文——《你真的了解Instant Run吗？》
+Instant Run主要分为三种类型，hot swap、warm swap和cold swap，Android Studio会根据代码的修改情况自动选择使用哪种swap类型。
+
+Hot Swap
+
+hot swap的适用条件比较少，只有一种情况会被Android Studio视为hot swap类型">
 
 
 
@@ -110,7 +126,7 @@
   };
 </script>
 
-  <title> Tag: 搜索 | Li's Blog </title>
+  <title> android studio instant run | Li's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -131,7 +147,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -209,46 +225,148 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        搜索
-        <small>Tag</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                android studio instant run
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-05-31T07:45:23+08:00" content="2016-05-31">
+              2016-05-31
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>###记录有关Instant Run的学习<br><a href="http://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&amp;mid=2650236001&amp;idx=1&amp;sn=f2ac9a45ebe0d59fa11d9599ad7cca50&amp;scene=4#wechat_redirect" target="_blank" rel="external">郭霖的原文——《你真的了解Instant Run吗？》</a></p>
+<p>Instant Run主要分为三种类型，hot swap、warm swap和cold swap，Android Studio会根据代码的修改情况自动选择使用哪种swap类型。</p>
+<ul>
+<li><strong>Hot Swap</strong></li>
+</ul>
+<p>hot swap的适用条件比较少，只有一种情况会被Android Studio视为hot swap类型，就是<strong>修改一个现有方法中的代码</strong> **</p>
+<ul>
+<li><strong>Warm Swap</strong></li>
+</ul>
+<p>warm swap的适用条件也比较局限，只有一种情况会被Android Studio视为warm swap类型，就是<strong>修改或删除一个现有的资源文件</strong></p>
+<ul>
+<li><strong>Cold Swap</strong></li>
+</ul>
+<p>cold swap相对而言就要更慢一些了，Android Studio会自动记录我们项目的每次修改，然后将修改的这部分内容打成一个dex文件发送到手机上，尽管这种swap类型仍然不需要去安装一个全新的APK，但是为了加载这个新的dex文件，整个应用程序必须进行重启才行。另外，cold swap的工作原理是基于multidex机制来实现的，在不引入外部library的情况下，只有5.0及以上的设备才支持multidex，因此，如果你使用了5.0以下的设备，那么cold swap就无法工作了，这种情况会执行最原始的完整APK安装过程。<br>cold swap的适用条件非常多。</p>
+<ul>
+<li>添加、删除或修改一个注解</li>
+<li>添加、删除或修改一个字段</li>
+<li>添加、删除或修改一个方法</li>
+<li>添加一个类</li>
+<li>修改一个类的继承结构</li>
+<li>修改一个类的接口实现</li>
+<li>修改一个类的static修饰符</li>
+<li>涉及资源文件id的改动</li>
+</ul>
+<ul>
+<li><strong>Full APK</strong></li>
+</ul>
+<p>除了满足以上条件的其他程序变更，Instant Run目前都还不支持，主要包括以下一些情况：</p>
+<ul>
+<li>改变AndroidManifest.xml文件的内容</li>
+<li>改变被AndroidManifest.xml文件所引用的资源，比如string.xml中的app_name</li>
+<li>改变桌面widget的UI相关元素</li>
+</ul>
+<p>当程序不被Instant Run所支持时，就会执行完整APK安装过程，同时Android Studio会给出这样的提示：<br><strong>Performing full build &amp; install</strong></p>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/05/29/如何搜索/" itemprop="url">
-              
-                <span itemprop="name">如何搜索</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-29T17:46:47+08:00"
-              content="2016-05-29" >
-          05-29
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/29/手势事件被重叠的下层消费解决思路/" rel="next" title="手势事件被重叠的下层消费解决思路">
+                <i class="fa fa-chevron-left"></i> 手势事件被重叠的下层消费解决思路
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -256,6 +374,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -275,8 +397,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
@@ -326,6 +457,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -422,6 +564,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

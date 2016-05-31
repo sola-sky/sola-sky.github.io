@@ -170,7 +170,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -180,7 +180,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -233,6 +233,133 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/31/android-studio-instant-run/" itemprop="url">
+                  android studio instant run
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-05-31T07:45:23+08:00" content="2016-05-31">
+              2016-05-31
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>###记录有关Instant Run的学习<br><a href="http://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&amp;mid=2650236001&amp;idx=1&amp;sn=f2ac9a45ebe0d59fa11d9599ad7cca50&amp;scene=4#wechat_redirect" target="_blank" rel="external">郭霖的原文——《你真的了解Instant Run吗？》</a></p>
+<p>Instant Run主要分为三种类型，hot swap、warm swap和cold swap，Android Studio会根据代码的修改情况自动选择使用哪种swap类型。</p>
+<ul>
+<li><strong>Hot Swap</strong></li>
+</ul>
+<p>hot swap的适用条件比较少，只有一种情况会被Android Studio视为hot swap类型，就是<strong>修改一个现有方法中的代码</strong> **</p>
+<ul>
+<li><strong>Warm Swap</strong></li>
+</ul>
+<p>warm swap的适用条件也比较局限，只有一种情况会被Android Studio视为warm swap类型，就是<strong>修改或删除一个现有的资源文件</strong></p>
+<ul>
+<li><strong>Cold Swap</strong></li>
+</ul>
+<p>cold swap相对而言就要更慢一些了，Android Studio会自动记录我们项目的每次修改，然后将修改的这部分内容打成一个dex文件发送到手机上，尽管这种swap类型仍然不需要去安装一个全新的APK，但是为了加载这个新的dex文件，整个应用程序必须进行重启才行。另外，cold swap的工作原理是基于multidex机制来实现的，在不引入外部library的情况下，只有5.0及以上的设备才支持multidex，因此，如果你使用了5.0以下的设备，那么cold swap就无法工作了，这种情况会执行最原始的完整APK安装过程。<br>cold swap的适用条件非常多。</p>
+<ul>
+<li>添加、删除或修改一个注解</li>
+<li>添加、删除或修改一个字段</li>
+<li>添加、删除或修改一个方法</li>
+<li>添加一个类</li>
+<li>修改一个类的继承结构</li>
+<li>修改一个类的接口实现</li>
+<li>修改一个类的static修饰符</li>
+<li>涉及资源文件id的改动</li>
+</ul>
+<ul>
+<li><strong>Full APK</strong></li>
+</ul>
+<p>除了满足以上条件的其他程序变更，Instant Run目前都还不支持，主要包括以下一些情况：</p>
+<ul>
+<li>改变AndroidManifest.xml文件的内容</li>
+<li>改变被AndroidManifest.xml文件所引用的资源，比如string.xml中的app_name</li>
+<li>改变桌面widget的UI相关元素</li>
+</ul>
+<p>当程序不被Instant Run所支持时，就会执行完整APK安装过程，同时Android Studio会给出这样的提示：<br><strong>Performing full build &amp; install</strong></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/29/手势事件被重叠的下层消费解决思路/" itemprop="url">
                   手势事件被重叠的下层消费解决思路
                 </a>
@@ -246,7 +373,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-29T17:56:07+08:00" content="2016-05-29">
               2016-05-29
             </time>
@@ -340,7 +467,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-29T17:46:47+08:00" content="2016-05-29">
               2016-05-29
             </time>
@@ -477,7 +604,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-22T21:12:01+08:00" content="2016-05-22">
               2016-05-22
             </time>
@@ -649,7 +776,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-22T14:30:28+08:00" content="2016-05-22">
               2016-05-22
             </time>
@@ -825,7 +952,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-22T09:31:11+08:00" content="2016-05-22">
               2016-05-22
             </time>
@@ -837,7 +964,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/hexo/" itemprop="url" rel="index">
@@ -959,7 +1086,7 @@
               
                 
                 <a class="post-title-link" href="/2016/05/20/shouldInterceptTouchEvent/" itemprop="url">
-                  Untitled
+                  Unbenannt
                 </a>
               
             
@@ -971,7 +1098,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-05-20T08:04:17+08:00" content="2016-05-20">
               2016-05-20
             </time>
@@ -1086,8 +1213,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1095,7 +1222,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -1104,7 +1231,7 @@
             <div class="site-state-item site-state-tags">
               <a href="/tags">
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               </a>
             </div>
           
@@ -1148,7 +1275,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
