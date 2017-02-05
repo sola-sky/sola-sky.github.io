@@ -480,17 +480,52 @@
 <ol>
 <li>多维数组（包括二维数组）都是引用类型，需要使用objectArray类型来进行表示，如二维数组就是指向一位数组的数组。</li>
 </ol>
-<h3 id="3-域描述符"><a href="#3-域描述符" class="headerlink" title="3. 域描述符"></a>3. 域描述符</h3><ol>
-<li><p>基本类型描述符</p>
-<p>| Java类型      | 描述符   |<br>| ———– | —– |<br>| <strong>boolean</strong> | <strong>Z</strong> |<br>| <strong>byte</strong>    | <strong>B</strong> |<br>| <strong>char</strong>    | <strong>C</strong> |<br>| <strong>short</strong>   | <strong>S</strong> |<br>| <strong>int</strong>     | <strong>I</strong> |<br>| <strong>long</strong>    | <strong>J</strong> |<br>| <strong>float</strong>   | <strong>F</strong> |<br>| <strong>double</strong>  | <strong>D</strong> |</p>
-</li>
-</ol>
+<h3 id="3-域描述符"><a href="#3-域描述符" class="headerlink" title="3. 域描述符"></a>3. 域描述符</h3><p>1.基本类型描述符</p>
+<table>
+<thead>
+<tr>
+<th>Java类型</th>
+<th>描述符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>boolean</strong></td>
+<td><strong>Z</strong></td>
+</tr>
+<tr>
+<td><strong>byte</strong></td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td><strong>char</strong></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>short</strong></td>
+<td><strong>S</strong></td>
+</tr>
+<tr>
+<td><strong>int</strong></td>
+<td><strong>I</strong></td>
+</tr>
+<tr>
+<td><strong>long</strong></td>
+<td><strong>J</strong></td>
+</tr>
+<tr>
+<td><strong>float</strong></td>
+<td><strong>F</strong></td>
+</tr>
+<tr>
+<td><strong>double</strong></td>
+<td><strong>D</strong></td>
+</tr>
+</tbody>
+</table>
 <p>上文 <code>{&quot;getCurrentPosition&quot;, &quot;()J&quot;, (void *)GetCurrentPosition}</code>中的<em>J</em>就是指long类型的描述符了。</p>
-<ol>
-<li><p>引用类型描述符</p>
+<p>2.引用类型描述符</p>
 <p>一般引用类型为(<em>L + 该类型类描述符 + ;</em>) （主要其中的的分号 <strong>“;”</strong>，这是描述符的一部分，而不是分段的意思），而<strong>类描述符</strong>是类全限定名称将原来的.分隔符换成/分隔符。如Java中的java.lang.String的类描述符就是java/lang/String。所以其域描述符就为<code>Ljava/lang/String;</code>。</p>
-</li>
-</ol>
 <h2 id="JNI异常处理"><a href="#JNI异常处理" class="headerlink" title="JNI异常处理"></a>JNI异常处理</h2><p>这里就简介介绍一下项目里的一个函数（来自于B站ijkplayer的源码）</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">J4A_ExceptionCheck__catchAll</span><span class="params">(JNIEnv *env)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (env-&gt;ExceptionCheck()) &#123;</div><div class="line">        env-&gt;ExceptionDescribe();</div><div class="line">        env-&gt;ExceptionClear();</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>用<code>ExceptionCheck()</code>函数检查一下最近JNI调用是否发送了异常，如果有则返回JNI_TRUE，则会执行上面代码中<code>if</code>花括号中的语句；若没有异常则返回JNI_FALSE。当检查到有异常时，调用<code>ExceptionDescribe()</code>来打印相关异常的堆栈信息，然后再调用<code>ExceptionClear()</code>函数来清除异常堆栈信息的缓冲区（防止后续异常堆栈信息覆盖之前的异常信息）。</p>
