@@ -202,24 +202,24 @@ target_link_libraries(solaplayer sdl ffmpeg ${jnigraphics-lib} yuv ${android-lib
 
 ### 3. 域描述符
 
-1. 基本类型描述符
+1.基本类型描述符
 
-   | Java类型      | 描述符   |
-   | ----------- | ----- |
-   | **boolean** | **Z** |
-   | **byte**    | **B** |
-   | **char**    | **C** |
-   | **short**   | **S** |
-   | **int**     | **I** |
-   | **long**    | **J** |
-   | **float**   | **F** |
-   | **double**  | **D** |
+| Java类型      | 描述符   |
+| ----------- | ----- |
+| **boolean** | **Z** |
+| **byte**    | **B** |
+| **char**    | **C** |
+| **short**   | **S** |
+| **int**     | **I** |
+| **long**    | **J** |
+| **float**   | **F** |
+| **double**  | **D** |
 
 上文 `{"getCurrentPosition", "()J", (void *)GetCurrentPosition}`中的*J*就是指long类型的描述符了。
 
-2. 引用类型描述符
+2.引用类型描述符
 
-   一般引用类型为(*L + 该类型类描述符 + ;*) （主要其中的的分号 **";"**，这是描述符的一部分，而不是分段的意思），而**类描述符**是类全限定名称将原来的.分隔符换成/分隔符。如Java中的java.lang.String的类描述符就是java/lang/String。所以其域描述符就为`Ljava/lang/String;`。
+一般引用类型为(*L + 该类型类描述符 + ;*) （主要其中的的分号 **";"**，这是描述符的一部分，而不是分段的意思），而**类描述符**是类全限定名称将原来的.分隔符换成/分隔符。如Java中的java.lang.String的类描述符就是java/lang/String。所以其域描述符就为`Ljava/lang/String;`。
 
 ## JNI异常处理
 
