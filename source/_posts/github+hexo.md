@@ -47,13 +47,13 @@ branch:master
 
 2. 然后执行命令:
 ```bash
-npm install hexo-deployer-get --save
+npm install hexo-deployer-git --save
 ```
 
 3. 最后执行部署命令：`hexo deploy`
-**这条命令很重要，不然 `hexo deploy`时会提示错误，无法解析git，对了type:一定是git,不是github。**
-**对了 repo中的地址用 SSH，不要用HTTPS，用HTTPS不知道为什么就行不行，可能是哪里配置有问题没有加密码什么的吧**
-**有问题可以看[这个网站,是hexo的官网，有文档](https://hexo.io/docs/)**
+   **这条命令很重要，不然 `hexo deploy`时会提示错误，无法解析git，对了type:一定是git,不是github。**
+   **对了 repo中的地址用 SSH，不要用HTTPS，用HTTPS不知道为什么就行不行，可能是哪里配置有问题没有加密码什么的吧**
+   **有问题可以看[这个网站,是hexo的官网，有文档](https://hexo.io/docs/)**
 
 ### 修改主题
   在根目录下修改_config.yml文件中的theme属性就可以了，将其设置为themes目录下的一个目录名字就行。然后执行部署。

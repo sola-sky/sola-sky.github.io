@@ -1,6 +1,13 @@
+---
+title: shouldInterceptTouchEvent
+date: 2016-05-20 07:14:36
+tags:
+---
+
 May 20, 2016 7:14 AM
 接下来我们回头看`shouldInterceptTouchEvent()`方法。
 当子View消费了事件的时候，就是无法使用`processTouchEvent()`方法了在OnTouchEvent里。除非你将`processTouchEvent()`方法放到其他地方执行。
+
 ```java
             case MotionEvent.ACTION_MOVE: {
                 if (mInitialMotionX == null || mInitialMotionY == null) break;
