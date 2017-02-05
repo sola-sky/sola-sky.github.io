@@ -1,0 +1,757 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="intent," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="以下内容来自刘明渊的博客
+
+
+显示Intent
+
+android5.0之后规定必须显示启动Service。
+
+隐式Intent
+
+当你隐式地启动一个activity时，intent会根据其中的内容，匹配其他组件中manifest文件的intent-filter，启动符合条件的组件，并把intent中参数传递过去，如果有多个intent-filter满足条件，那么系统将会弹出一个对话框，由用户自己">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Intent学习记录">
+<meta property="og:url" content="http://solasky.info/2016/05/22/Intent学习记录/index.html">
+<meta property="og:site_name" content="Li's Blog">
+<meta property="og:description" content="以下内容来自刘明渊的博客
+
+
+显示Intent
+
+android5.0之后规定必须显示启动Service。
+
+隐式Intent
+
+当你隐式地启动一个activity时，intent会根据其中的内容，匹配其他组件中manifest文件的intent-filter，启动符合条件的组件，并把intent中参数传递过去，如果有多个intent-filter满足条件，那么系统将会弹出一个对话框，由用户自己">
+<meta property="og:updated_time" content="2017-02-05T00:46:05.412Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Intent学习记录">
+<meta name="twitter:description" content="以下内容来自刘明渊的博客
+
+
+显示Intent
+
+android5.0之后规定必须显示启动Service。
+
+隐式Intent
+
+当你隐式地启动一个activity时，intent会根据其中的内容，匹配其他组件中manifest文件的intent-filter，启动符合条件的组件，并把intent中参数传递过去，如果有多个intent-filter满足条件，那么系统将会弹出一个对话框，由用户自己">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://solasky.info/2016/05/22/Intent学习记录/"/>
+
+
+
+
+
+  <title> Intent学习记录 | Li's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Li's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/05/22/Intent学习记录/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Intent学习记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-22T14:30:28+08:00">
+                2016-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><strong><a href="http://blog.csdn.net/vanpersie_9987" target="_blank" rel="external">以下内容来自刘明渊的博客</a></strong></p>
+</blockquote>
+<ul>
+<li>显示Intent</li>
+</ul>
+<p>android5.0之后规定必须显示启动Service。</p>
+<ul>
+<li>隐式Intent</li>
+</ul>
+<p>当你<strong>隐式地</strong>启动一个activity时，intent会根据其中的内容，匹配其他组件中manifest文件的intent-filter，启动符合条件的组件，并把intent中参数传递过去，如果有多个intent-filter满足条件，那么系统将会弹出一个对话框，由用户自己决定启动那个组件。</p>
+<p><strong>intent-filter</strong>是manifest文件内部的一个标签，该标签描述了组件具备身体特性，如果组件未配置intent-filter，那么该组件只能显示启动了。</p>
+<h3 id="创建Intent对象"><a href="#创建Intent对象" class="headerlink" title="创建Intent对象"></a>创建Intent对象</h3><p>intent中包含了目标组件需满足的特性。Intent中应包含以下信息：</p>
+<ul>
+<li>Component name:</li>
+</ul>
+<p>目标组件的名字。对于显示启动，这是不可缺省的，可以使用Intent的构造函数传入组件名字，也可以调用<code>setComponent()</code>,<code>setClass()</code>,<code>setClassName()</code>这些方法传入组件名。当然若是隐式启动，这些便是可选的了，但是相对的intent中应包含其他的信息（<strong>action、category、data</strong>）。</p>
+<ul>
+<li>Action：</li>
+</ul>
+<p>是一个可以指明目标组件行为的字符串。<strong>action</strong>很大程度上决定了category和data中应该传入的信息；也可以在自己的应用程序组件中指定action，以便让其他应用程序启动自己的组件。对应于action中字符串，不建议使用硬编码的形式，而应该在所属组件的类中设置为常量。</p>
+<p>常见的action有：ACTION_VIEW（一般用于向用户展示一些信息），ACTION_SEND（一般需要向其附带一些发送信息，这些信息由目标activity决定发送给谁，如社交类app）。</p>
+<p>可以将action作为参数传入intent构造函数中，也可以用setAction()。</p>
+<p>如需要自定义组件的action，应该用应用的包名作为前缀如”com.apical.”。</p>
+<ul>
+<li>Data</li>
+</ul>
+<p>创建一个Intent时，除了为data指定URI之外，还应该指定data的MIME类型。比如启动一个展示图片的activity不能用于播放音乐的，所以就需要将MIMI指定为”image/*“；有些时候data能从URI中就能推断出MIME的类型，比如当一个URI的schema是”content://“时，表明该URI指定了设备内部的一个文件并由ContentProvider管理着，系统可以根据该文件推断data的MIME类型。</p>
+<p>可以调用<code>setData()</code>设置URI，调用<code>setType()</code>设置MIME类型，或者调用<code>setDataAndType()</code>同时设置URI和MIME类型。</p>
+<p><strong>注意如果需要同时设置URI和MIME类型时必须调用setDataAndType()，而不能分别调用setData()和setType()，因为setData()时会将setType()的内容置空，而调用setType()时也是一样的。</strong></p>
+<ul>
+<li>Category</li>
+</ul>
+<p>是一个字符串，表示目标组件的附加信息。</p>
+<p><strong>CATEGORY_BROWSEABLE:</strong>表示目标activity可以被网页上的某个链接启动，比如图片activity或e-mail信息的activity。</p>
+<p>可以将category参数通过addCategory()方法传入。</p>
+<ul>
+<li>还有<strong>Extras</strong>和<strong>Flags</strong></li>
+</ul>
+<p>extras可以携带附加信息，以键值对的形式存储，而flags则指导系统以何种方式启动activity，是否将activity放在该应用的任务栈中，等等。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ul>
+<li>若系统中没有满足隐式Intent的目标组件，应用将崩溃，所以最好先判断再启动<code>startActivity()</code>，可以用<code>intent.resolveActivity(getPackageManager())</code>进行非空判断。对了还有就是<code>Intent.createChooser()</code>可以保证每次都弹出选择列表。</li>
+</ul>
+<ul>
+<li><p>还有就是如组件需要被隐式启动，则必须在manifest中为其配置<strong>CATEGORY_DEFAULT</strong>。</p>
+</li>
+<li><p><code>&lt;action android:name=&quot;android.intent.action.MAIN /&gt;&quot;</code> <code>&lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;</code>这两个应该成对出现。</p>
+</li>
+<li><p>使用Pending Intent：PendingIntent是一个包装Intent的类，主要用于实现Intent的延迟操作，主要的应用场合有：1. 包装一个Notification的启动Intent  2. 包装一个App Widget的Intent（按Home键启动的activity）  3. 包装一个延迟启动的activity（如AlarmManager）。  通过PendingIntent启动的activity无需使用<code>startActivity()</code>，而是使用<code>PendingIntent.getActivity(), getService(), getBroadcast()</code></p>
+</li>
+<li><p>action标签可以定义多个，intent只要匹配其中一个就行，而category也可以定义多个，但是intent中定义的每一个category都必须在intent-filter中，否则不行（注意intent-filter中的category可能会比intent中定义的多，但只要intent中是其子集就行）。</p>
+</li>
+<li><p>通过startActivity()方法隐式启动intent中，将被自动添加一个CATEGORY_DEFAULT的category标签，所以若希望activity能被隐式启动，则需要在intent-filter中添加一个android.intent.category.DEFAULT的category标签。</p>
+</li>
+<li><p>匹配Data的时候，每个data标签都能设置mimeType和URI结果，其中URI可分为四部分：scheme，host，port和path，如content://com.apical.cloud:520/folder/subfolder/etc,其中content为scheme，com.apical.cloud为host，520为port，后面的就是path了。但是每一部分在标签中都不是必须定义的，但存在一个线性依赖：若scheme未指定，则host被忽略。若host未指定，port被忽略，若scheme和host均未被指定，则path被忽略。</p>
+</li>
+</ul>
+<p>在intent中添加的data只需要匹配一部分intent-filter中的data（URI匹配）：</p>
+<ul>
+<li><p>若filter只定义了scheme，则intent的data定义的URI中只要包含了相同的scheme，就能匹配；</p>
+</li>
+<li><p>若filter只定义了scheme和host，则intent的data定义的URI中只要包含了相同的scheme和host，就能匹配；</p>
+</li>
+<li><p>若filter只定义了scheme、host和port，则intent的data定义的URI中只要包含了相同的scheme、host和port，就能匹配；</p>
+</li>
+</ul>
+<p>intent-filter匹配intent的data中URI和mimeType类型的规则如下：</p>
+<ol>
+<li><p>如果intent-filter中未指定data，则未添加data的intent可以匹配；</p>
+</li>
+<li><p>如果intent-filter中指定了URI，但未指定mimeType，则按照上一段的规则匹配（intent中也应未指定mimeType）；</p>
+</li>
+<li><p>如果intent-filter中指定了mimeType，而未指定URI，则可以匹配intent中指定了相同mimeType，而未指定URI的组件；</p>
+</li>
+<li><p>如果intent-filter中同时指定了mimeType和URI，则：</p>
+</li>
+</ol>
+<ul>
+<li><p>intent中添加的mimeType只要能匹配上intent-filter中的某一个mimeType，就能匹配上mimeType部分；</p>
+</li>
+<li><p>intent中添加的URI则按照上一段中的URI匹配规则，就能该匹配上URI部分；<strong>特别地：若intent中的URI的scheme 指定为content: 或者 file:，那么即便intent-filter中未定义URI，也能匹配成功。换句话说：包含content: 或者 file: 的URI总是能匹配上只定义了mimeType的intent-filter。</strong></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/intent/" rel="tag"># intent</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/22/github+hexo/" rel="next" title="Github + Hexo">
+                <i class="fa fa-chevron-left"></i> Github + Hexo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/22/drawable微技巧学习记录/" rel="prev" title="drawable微技巧学习记录">
+                drawable微技巧学习记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
+               alt="sola_sky" />
+          <p class="site-author-name" itemprop="name">sola_sky</p>
+          <p class="site-description motion-element" itemprop="description">学习记录和总结</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Intent对象"><span class="nav-number">1.</span> <span class="nav-text">创建Intent对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意"><span class="nav-number">2.</span> <span class="nav-text">注意</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  Sat May 21 2016 08:00:00 GMT+0800 (中国标准时间) - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sola_sky</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SurfaceView," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="原文出处：SurfaceView，老罗的文章
+123456protected void onAttachedToWindow() &amp;#123;      super.onAttachedToWindow();      mParent.requestTransparentRegion(this);      mSession = getWindowSession();      ......  &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SurfaceView学习记录">
+<meta property="og:url" content="http://solasky.info/2016/06/22/SurfaceView学习记录/index.html">
+<meta property="og:site_name" content="Li's Blog">
+<meta property="og:description" content="原文出处：SurfaceView，老罗的文章
+123456protected void onAttachedToWindow() &amp;#123;      super.onAttachedToWindow();      mParent.requestTransparentRegion(this);      mSession = getWindowSession();      ......  &amp;">
+<meta property="og:updated_time" content="2016-06-23T02:47:37.102Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SurfaceView学习记录">
+<meta name="twitter:description" content="原文出处：SurfaceView，老罗的文章
+123456protected void onAttachedToWindow() &amp;#123;      super.onAttachedToWindow();      mParent.requestTransparentRegion(this);      mSession = getWindowSession();      ......  &amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://solasky.info/2016/06/22/SurfaceView学习记录/"/>
+
+
+
+
+
+  <title> SurfaceView学习记录 | Li's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Li's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/22/SurfaceView学习记录/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SurfaceView学习记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-22T19:03:03+08:00">
+                2016-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://blog.csdn.net/luoshengyang/article/details/8661317" target="_blank" rel="external">原文出处：SurfaceView，老罗的文章</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onAttachedToWindow</span><span class="params">()</span> </span>&#123;  </div><div class="line">    <span class="keyword">super</span>.onAttachedToWindow();  </div><div class="line">    mParent.requestTransparentRegion(<span class="keyword">this</span>);  </div><div class="line">    mSession = getWindowSession();  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第一件事情是通知父视图，当前正在处理的SurfaceView需要在宿主窗口的绘图表面上挖一个洞，即需要在宿主窗口的绘图表面上设置一块透明区域。当前正在处理的SurfaceView的父视图保存在父类View的成员变量mParent中，通过调用这个成员变量mParent所指向的一个ViewGroup对象的成员函数requestTransparentRegion，就可以通知到当前正在处理的SurfaceView的父视图，当前正在处理的SurfaceView需要在宿主窗口的绘图表面上设置一块透明区域。</p>
+<p>第二件事情是调用从父类View继承下来的成员函数getWindowSession来获得一个实现了IWindowSession接口的Binder代理对象，并且将该Binder代理对象保存在SurfaceView类的成员变量mSession中。从前面Android应用程序窗口（Activity）实现框架简要介绍和学习计划这个系列的文章可以知道，在Android系统中，每一个应用程序进程都有一个实现了IWindowSession接口的Binder代理对象，这个Binder代理对象是用来与WindowManagerService服务进行通信的，View类的成员函数getWindowSession返回的就是该Binder代理对象。在接下来的Step 8中，我们就可以看到，SurfaceView就可以通过这个实现了IWindowSession接口的Binder代理对象来请求WindowManagerService服务为自己创建绘图表面的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class SurfaceView extends View &#123;  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    boolean mRequestedVisible = false;  </div><div class="line">    boolean mWindowVisibility = false;  </div><div class="line">    boolean mViewVisibility = false;  </div><div class="line">    .....  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    protected void onWindowVisibilityChanged(int visibility) &#123;  </div><div class="line">        super.onWindowVisibilityChanged(visibility);  </div><div class="line">        mWindowVisibility = visibility == VISIBLE;  </div><div class="line">        mRequestedVisible = mWindowVisibility &amp;&amp; mViewVisibility;  </div><div class="line">        updateWindow(false, false);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> SurfaceView类有三个用来描述可见性的成员变量mRequestedVisible、mWindowVisibility和mViewVisibility。其中，mWindowVisibility表示SurfaceView的宿主窗口的可见性，mViewVisibility表示SurfaceView自身的可见性。只有当mWindowVisibility和mViewVisibility的值均等于true的时候，mRequestedVisible的值才为true，表示SurfaceView是可见的。</p>
+<p>绘图表面类型为SURFACE_TYPE_PUSH_BUFFERS的SurfaceView的UI是不能由应用程序来控制的，而是由专门的服务来控制的，例如，摄像头服务或者视频播放服务，同时，SurfaceFlinger服务会使用一种特殊的LayerBuffer来描述这种绘图表面。使用LayerBuffer来描述的绘图表面在进行渲染的时候，可以使用硬件加速，例如，使用copybit或者overlay来加快渲染速度，从而可以获得更流畅的摄像头预览或者视频播放。</p>
+<ul>
+<li>mHaveFrame，用来描述SurfaceView的宿主窗口的大小是否已经计算好了。只有当宿主窗口的大小计算之后，SurfaceView才可以更新自己的窗口。</li>
+<li><p>mRequestedWidth，用来描述SurfaceView最后一次被请求的宽度。</p>
+</li>
+<li><p>mRequestedHeight，用来描述SurfaceView最后一次被请求的高度。</p>
+</li>
+<li><p>mRequestedFormat，用来描述SurfaceView最后一次被请求的绘图表面的像素格式。</p>
+</li>
+<li><p>mNewSurfaceNeeded，用来描述SurfaceView是否需要新创建一个绘图表面。</p>
+</li>
+<li><p>mLeft、mTop、mWidth、mHeight，用来描述SurfaceView上一次所在的位置以及大小。</p>
+</li>
+<li><p>mFormat，用来描述SurfaceView的绘图表面上一次所设置的格式。</p>
+</li>
+<li><p>mVisible，用来描述SurfaceView上一次被设置的可见性。</p>
+</li>
+<li><p>mType，用来描述SurfaceView的绘图表面上一次所设置的类型。</p>
+</li>
+<li><p>mUpdateWindowNeeded，用来描述SurfaceView是否被WindowManagerService服务通知执行一次UI更新操作。</p>
+</li>
+<li><p>mReportDrawNeeded，用来描述SurfaceView是否被WindowManagerService服务通知执行一次UI绘制操作。</p>
+</li>
+<li><p>mLayout，指向的是一个WindowManager.LayoutParams对象，用来传递SurfaceView的布局参数以及属性值给WindowManagerService服务，以便WindowManagerService服务可以正确地维护它的状态。</p>
+</li>
+</ul>
+<h3 id="挖洞过程"><a href="#挖洞过程" class="headerlink" title="挖洞过程"></a>挖洞过程</h3><p>从SurfaceView的绘图表面的创建过程可以知道，SurfaceView在被附加到宿主窗口之上的时候，SurfaceView类的成员函数onAttachedToWindow就会被调用。SurfaceView类的成员函数onAttachedToWindow在被调用的期间，就会请求在宿主窗口上设置透明区域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class SurfaceView extends View &#123;  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    protected void onAttachedToWindow() &#123;  </div><div class="line">        super.onAttachedToWindow();  </div><div class="line">        mParent.requestTransparentRegion(this);  </div><div class="line">        ......  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewGroup</span> <span class="keyword">extends</span> <span class="title">View</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>, <span class="title">ViewManager</span> </span>&#123;  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestTransparentRegion</span><span class="params">(View child)</span> </span>&#123;  </div><div class="line">        <span class="keyword">if</span> (child != <span class="keyword">null</span>) &#123;  </div><div class="line">            child.mPrivateFlags |= View.REQUEST_TRANSPARENT_REGIONS;  </div><div class="line">            <span class="keyword">if</span> (mParent != <span class="keyword">null</span>) &#123;  </div><div class="line">                mParent.requestTransparentRegion(<span class="keyword">this</span>);  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewRoot</span> <span class="keyword">extends</span> <span class="title">Handler</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>,  </span></div><div class="line">        <span class="title">View</span>.<span class="title">AttachInfo</span>.<span class="title">Callbacks</span> &#123;  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestTransparentRegion</span><span class="params">(View child)</span> </span>&#123;  </div><div class="line">        <span class="comment">// the test below should not fail unless someone is messing with us  </span></div><div class="line">        checkThread();  </div><div class="line">        <span class="keyword">if</span> (mView == child) &#123;  </div><div class="line">            mView.mPrivateFlags |= View.REQUEST_TRANSPARENT_REGIONS;  </div><div class="line">            <span class="comment">// Need to make sure we re-evaluate the window attributes next  </span></div><div class="line">            <span class="comment">// time around, to ensure the window has the correct format.  </span></div><div class="line">            mWindowAttributesChanged = <span class="keyword">true</span>;  </div><div class="line">            requestLayout();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当一个窗口被请求设置了一块透明区域之后，它的窗口属性就发生变化了，因此，这时候除了要将与它所关联的一个ViewRoot对象的成员变量mWindowAttributesChanged的值设置为true之外，还要调用该ViewRoot对象的成员函数requestLayout来请求刷新一下窗口的UI，即请求对窗口的UI进行重新布局和绘制。<br>ViewRoot类的成员函数requestLayout最终会调用到另外一个成员函数performTraversals来实际执行刷新窗口UI的操作。<br>ViewRoot类的成员函数performTraversals在刷新窗口UI的过程中，就会将嵌入在它里面的SurfaceView所要设置的透明区域收集起来，以便可以请求WindowManagerService将这块透明区域设置到它的绘图表面上去。<br><strong>挖洞过程主要是使用Region，从顶层视图将其往子View传递Region，在传递过程中通过调用Region的op()方法，将某区域设置为Region.Op.DIFFERENCE或者为Region.Op.UNION来区分是否将其透明，前者不透明，后者透明处理(sWindowSession.setTransparentRegion()方法将UNION的区域设置)</strong></p>
+<h3 id="绘制过程"><a href="#绘制过程" class="headerlink" title="绘制过程"></a>绘制过程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public class SurfaceView extends View &#123;  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public void draw(Canvas canvas) &#123;  </div><div class="line">        if (mWindowType != WindowManager.LayoutParams.TYPE_APPLICATION_PANEL) &#123;  </div><div class="line">            // draw() is not called when SKIP_DRAW is set  </div><div class="line">            if ((mPrivateFlags &amp; SKIP_DRAW) == 0) &#123;  </div><div class="line">                // punch a whole in the view-hierarchy below us  </div><div class="line">                canvas.drawColor(0, PorterDuff.Mode.CLEAR);  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        super.draw(canvas);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    protected void dispatchDraw(Canvas canvas) &#123;  </div><div class="line">        if (mWindowType != WindowManager.LayoutParams.TYPE_APPLICATION_PANEL) &#123;  </div><div class="line">            // if SKIP_DRAW is cleared, draw() has already punched a hole  </div><div class="line">            if ((mPrivateFlags &amp; SKIP_DRAW) == SKIP_DRAW) &#123;  </div><div class="line">                // punch a whole in the view-hierarchy below us  </div><div class="line">                canvas.drawColor(0, PorterDuff.Mode.CLEAR);  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        // reposition ourselves where the surface is   </div><div class="line">        mHaveFrame = true;  </div><div class="line">        updateWindow(false, false);  </div><div class="line">        super.dispatchDraw(canvas);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>本来SurfaceView类的成员函数draw是用来将自己的UI绘制在宿主窗口的绘图表面上的，但是这里我们可以看到，如果当前正在处理的SurfaceView不是用作宿主窗口面板的时候，即其成员变量mWindowType的值不等于WindowManager.LayoutParams.TYPE_APPLICATION_PANEL的时候，SurfaceView类的成员函数draw只是简单地将它所占据的区域绘制为黑色。<br>本来SurfaceView类的成员函数dispatchDraw是用来绘制SurfaceView的子视图的，但是这里我们同样看到，如果当前正在处理的SurfaceView不是用作宿主窗口面板的时候，那么SurfaceView类的成员函数dispatchDraw只是简单地将它所占据的区域绘制为黑色，同时，它还会通过调用另外一个成员函数updateWindow更新自己的UI，实际上就是请求WindowManagerService服务对自己的UI进行布局，以及创建绘图表面。<br>从SurfaceView类的成员函数draw和dispatchDraw的实现就可以看出，SurfaceView在其宿主窗口的绘图表面上面所做的操作就是将自己所占据的区域绘为黑色，除此之外，就没有其它更多的操作了，这是因为SurfaceView的UI是要展现在它自己的绘图表面上面的。接下来我们就分析如何在SurfaceView的绘图表面上面进行UI绘制。<br>注意，只有在一个SurfaceView的绘图表面的类型不是SURFACE_TYPE_PUSH_BUFFERS的时候，我们才可以自由地在上面绘制UI。</p>
+<p>在<code>SurfaceViewHolder.lockCanvas()</code>其内部实现时，在成功获取画布时，是调用了一个域来对画布进行锁定的。 <code>final ReentrantLock mSurfaceLock = new ReentrantLock();</code><br>具体代码如下:</p>
+<pre><code>public class SurfaceView extends View {  
+    ......  
+
+    final ReentrantLock mSurfaceLock = new ReentrantLock();  
+    final Surface mSurface = new Surface();  
+    ......  
+
+    private SurfaceHolder mSurfaceHolder = new SurfaceHolder() {  
+        ......  
+
+        public Canvas lockCanvas() {  
+            return internalLockCanvas(null);  
+        }  
+
+        ......  
+
+        private final Canvas internalLockCanvas(Rect dirty) {  
+            if (mType == SURFACE_TYPE_PUSH_BUFFERS) {  
+                throw new BadSurfaceTypeException(  
+                        &quot;Surface type is SURFACE_TYPE_PUSH_BUFFERS&quot;);  
+            }  
+            mSurfaceLock.lock();  
+            ......  
+
+            Canvas c = null;  
+            if (!mDrawingStopped &amp;&amp; mWindow != null) {  
+                Rect frame = dirty != null ? dirty : mSurfaceFrame;  
+                try {  
+                    c = mSurface.lockCanvas(frame);  
+                } catch (Exception e) {  
+                    Log.e(LOG_TAG, &quot;Exception locking surface&quot;, e);  
+                }  
+            }  
+            ......  
+
+            if (c != null) {  
+                mLastLockTime = SystemClock.uptimeMillis();  
+                return c;  
+            }  
+            ......  
+
+            mSurfaceLock.unlock();  
+
+            return null;    
+        }   
+
+        ......           
+    }  
+
+    ......  
+}
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>SurfaceView有以下三个特点：</p>
+<ul>
+<li>具有独立的绘图表面；</li>
+<li>需要在宿主窗口上挖一个洞来显示自己；</li>
+<li>它的UI绘制可以在独立的线程中进行，这样就可以进行复杂的UI绘制，并且不会影响应用程序的主线程响应用户输入。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SurfaceView/" rel="tag"># SurfaceView</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/21/View之绘制过程/" rel="next" title="View之绘制过程">
+                <i class="fa fa-chevron-left"></i> View之绘制过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/28/音视频——YUV和RGB/" rel="prev" title="音视频——YUV和RGB">
+                音视频——YUV和RGB <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
+               alt="sola_sky" />
+          <p class="site-author-name" itemprop="name">sola_sky</p>
+          <p class="site-description motion-element" itemprop="description">学习记录和总结</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#挖洞过程"><span class="nav-number">1.</span> <span class="nav-text">挖洞过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绘制过程"><span class="nav-number">2.</span> <span class="nav-text">绘制过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  Sat May 21 2016 08:00:00 GMT+0800 (中国标准时间) - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sola_sky</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

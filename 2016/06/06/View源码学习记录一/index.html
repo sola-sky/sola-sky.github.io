@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="###View类的注释文档
+
+set properties
+set focus
+set up listeners
+set visibility
+
+onFinishInflate()Called after a view and all of its children has been inflated from xml.
+onMeasure()Called to determine the siz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="View源码学习记录一">
+<meta property="og:url" content="http://solasky.info/2016/06/06/View源码学习记录一/index.html">
+<meta property="og:site_name" content="Li's Blog">
+<meta property="og:description" content="###View类的注释文档
+
+set properties
+set focus
+set up listeners
+set visibility
+
+onFinishInflate()Called after a view and all of its children has been inflated from xml.
+onMeasure()Called to determine the siz">
+<meta property="og:image" content="http://thumbnail0.baidupcs.com/thumbnail/1d14172118811b1a6de058025448980c?fid=2350953866-250528-639134407184938&time=1465614000&rt=sh&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-MKdEjJJIByrk01WugcLIDB%2BgPqY%3D&expires=8h&chkv=0&chkbd=0&chkpc=&dp-logid=3768716526557097506&dp-callid=0&size=c710_u400&quality=100">
+<meta property="og:updated_time" content="2017-02-05T00:46:05.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="View源码学习记录一">
+<meta name="twitter:description" content="###View类的注释文档
+
+set properties
+set focus
+set up listeners
+set visibility
+
+onFinishInflate()Called after a view and all of its children has been inflated from xml.
+onMeasure()Called to determine the siz">
+<meta name="twitter:image" content="http://thumbnail0.baidupcs.com/thumbnail/1d14172118811b1a6de058025448980c?fid=2350953866-250528-639134407184938&time=1465614000&rt=sh&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-MKdEjJJIByrk01WugcLIDB%2BgPqY%3D&expires=8h&chkv=0&chkbd=0&chkpc=&dp-logid=3768716526557097506&dp-callid=0&size=c710_u400&quality=100">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://solasky.info/2016/06/06/View源码学习记录一/"/>
+
+
+
+
+
+  <title> View源码学习记录一 | Li's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Li's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/06/View源码学习记录一/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                View源码学习记录一
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-06T07:16:04+08:00">
+                2016-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>###View类的注释文档</p>
+<ul>
+<li>set properties</li>
+<li>set focus</li>
+<li>set up listeners</li>
+<li>set visibility</li>
+</ul>
+<p><code>onFinishInflate()</code><br>Called after a view and all of its children has been inflated from xml.</p>
+<p><code>onMeasure()</code><br>Called to determine the size requirements for this view and all of its children.</p>
+<p><code>onLayout()</code><br><code>onSizeChanged()</code><br><code>onDraw()</code><br><code>onKeyDown()</code><br><code>onKeyUp()</code><br><code>onTrackballEvent()</code><br><code>onTouchEvent</code><br><code>onFocusChanged</code><br><code>onWindowFocusChanged</code><br><code>onAttachedToWindow</code><br><code>onDetachedFromWindow</code><br><code>onWindowVisibilityChanged</code></p>
+<p><strong>measured width 和 measured height</strong><br>These dimensions define how big a view wants to be within its parent.<br>The measured dimensions can be obtained by calling getMeasuredWidth() getMeasureHeight()</p>
+<p><strong>width and height or drawing width and drawing height</strong><br>These dimensions define the acutal size of the view on screen, <strong>at drawing time and after layout</strong>.These values may,but do no have to, be different from the measured width and height.<br>(<strong>注意：width和height的获取是在layout方法之后才能获取到的，本质上是右边减左边坐标，而坐标是在layout时确定的，还有就是width可以和measured width不一样</strong>)</p>
+<p>To measure its dimensions, a view takes into account its padding.(<strong>也就是说，为了测量，padding也是需要考虑进入的，也就是说计算measured width时需要加上padding</strong>)</p>
+<p><em>Event though a view can define a padding, it does not provide any support for margins. However, view groups provide sucah a support.</em><br><strong>ViewGroup and ViewGroup.MarginLayoutParams</strong></p>
+<p> A parent view may call measure() more than once on its children. For example, the parent may measure each child once with unspecified dimensions to find out how big they want to be, then call measure() on them again with actual numbers if the sum of all the children’s unconstrained sizes is too big or too small.</p>
+<p>The measure pass uses two classes to communicate dimensions.The<br><strong>MeasureSpec</strong> lass is used by views to tell their parents how they want to be measured and positioned. The base LayoutParams class just describes how big the view wants to be for both width and height.</p>
+<li>UNSPECIFIED: This is used by a parent to determine the desired dimension<br>of a child view. For example, a LinearLayout may call measure() on its child with the height set to UNSPECIFIED and a width of EXACTLY 240 to find out how tall the child view wants to be given a width of 240 pixels.<br></li><li>EXACTLY: This is used by the parent to impose an exact size on the child. The child must use this size, and guarantee that all of its descendants will fit within this size.<br></li><li>AT_MOST: This is used by the parent to impose a maximum size on the child. The child must guarantee that it and all of its descendants will fit within this size.<br><br></li><li><strong>requestLayout</strong>: 典型的用法是当view确信当前的边界不再适合它时，可以调用这个方法重新布局。</li>
+
+<p>If you set a background drawable for a View, then the View will draw it before calling back to its <code>onDraw()</code> method. The child drawing order can be overridden with ViewGroup#setChildrenDrawingOrderEnabled(boolean) custom child drawing order in a ViewGroup, and with #setZ(float) custom Z values set on Views.<br>也就说背景图片在回调<code>onDraw()</code>之前就会被画。并且绘画的顺序可以通过<code>setChildrenDrawingOrderEnabled()</code>自定义子view的顺序，通过设置z坐标。</p>
+<p><strong> To force a view to draw, call invalidate()</strong></p>
+<p><strong>边界改变用requestLayout,可见性改变用invalidate()</strong></p>
+<p>**注意：整个视图树是单线程，所以当你调用任何方法和view时都必须在UI线程。<br>If you are doing work on other threads and want to update the state of a view from that thread, you should use a Handler.</p>
+<p>focus是用来处理用户输入的<br>When in touch mode (see notes below) views indicate whether they still would like focus via {@link #isFocusableInTouchMode} and can change this via {@link #setFocusableInTouchMode(boolean)}.<br>也就是说用来判断在触摸时，该view是否会持有焦点。<br><code>isFocusable()</code>是用来判断该view是否有获取焦点的能力<br><code>setFocusable()</code>赋予该view拥有获取焦点的能力<br><code>requestFocus()</code>让该view获取到焦点</p>
+<p>For a touch capable device, once the user touches the screen, the device will enter touch mode.  From this point onward, only views for which {@link #isFocusableInTouchMode} is true will be focusable, such as text editing widgets. Other views that are touchable, like buttons, will not take focus when touched; they will only fire the on click listeners.<br>Any time a user hits a directional key, such as a D-pad direction, the view device will exit touch mode, and find a view to take focus, so that the user may resume interacting with the user interface without touching the screen again.<br>这段话的意思是说当设备进入触摸模式时，只有那些在触摸模式下有能力获得focus的控件才能获得focus，比如TextView。但是像Button默认就是不会获得焦点了在触摸时。<br>可用<code>isInTouchMode()</code>来查看当前是否处于触摸模式</p>
+<h3 id="View源码"><a href="#View源码" class="headerlink" title="View源码"></a>View源码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@IntDef</span>(&#123;VISIBLE, INVISIBLE, GONE&#125;)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Visibility &#123;&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://thumbnail0.baidupcs.com/thumbnail/1d14172118811b1a6de058025448980c?fid=2350953866-250528-639134407184938&amp;time=1465614000&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-MKdEjJJIByrk01WugcLIDB%2BgPqY%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=3768716526557097506&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100" alt="setVisibility"></p>
+<p>因为<code>public void setVisibility(@Visibility int visibility)</code>的参数被@Visibility标记了，所以只能用@IntDef里声明的那些变量来对参数进行赋值，不然会提示错误。这么做是用来代替枚举型，因为Enum通常需要两倍以上的存储空间。而在常量定义了之后，事实上我们已经可以使之作为对Enum的替代了，但是在实际的开发过程中写的代码如果换成了其他的变量名，编译器并不能够报错。所以就用了<strong>@IntDef @Retention @interface</strong>这种办法。</p>
+<ul>
+<li>RetentionPolicy.SOURCE —— 这种类型的Annotations只在源代码级别保留,编译时就会被忽略</li>
+<li>RetentionPolicy.CLASS —— 这种类型的Annotations编译时被保留,在class文件中存在,但JVM将会忽略</li>
+<li>RetentionPolicy.RUNTIME —— 这种类型的Annotations将被JVM保留,所以他们能在运行时被JVM或其他使</li>
+</ul>
+<h3 id="StateSet"><a href="#StateSet" class="headerlink" title="StateSet"></a>StateSet</h3><p>State sets are arrays of positive ints where each element represents the state of a {@link android.view.View} (e.g. focused, selected, visible, etc.).  A {@link android.view.View} may be in one or more of those states.</p>
+<p>每个元素代表View的状态，比如focused，selected，visible等。</p>
+<p>A state spec is an array of signed ints where each element represents a required (if positive) or an undesired (if negative) {@link android.view.View} state.<br>元素为正代表需要，为负代表没有需要。</p>
+<p><code>private static final int[][] VIEW_STATE_SETS;</code>在相应的行存放不同状态（状态可以组合）的引用，比如WINDOW_FOCUSED是在index为1（坐标从0开始）的那行，及第二行了。比如3为WINDOW_FOCUSED和SELECTED的组合，一维数组的长度就是2了，分别就存放这两个状态对应的drawable的Int值了（R），至于第一是存放WINDOW_FOCUSED还是第二个存放它，就得看<code>R.styleable.ViewDrawableStates[]</code>数组中这两个状态是先后顺序了。</p>
+<p><strong>View中的SYSTEM_UI<em>FLAG</em> 这些属性标签对于控制屏幕显示挺重要的</strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/31/android-studio-instant-run/" rel="next" title="android studio instant run">
+                <i class="fa fa-chevron-left"></i> android studio instant run
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/07/Toolbar/" rel="prev" title="Toolbar">
+                Toolbar <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
+               alt="sola_sky" />
+          <p class="site-author-name" itemprop="name">sola_sky</p>
+          <p class="site-description motion-element" itemprop="description">学习记录和总结</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#View源码"><span class="nav-number">1.</span> <span class="nav-text">View源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#StateSet"><span class="nav-number">2.</span> <span class="nav-text">StateSet</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  Sat May 21 2016 08:00:00 GMT+0800 (中国标准时间) - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sola_sky</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
