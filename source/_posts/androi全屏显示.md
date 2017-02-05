@@ -1,5 +1,5 @@
 ---
-title: androi全屏显示
+title: android全屏显示
 date: 2016-06-20 19:15:25
 tags: FULL_SCREEN
 ---
