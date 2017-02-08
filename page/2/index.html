@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Accueil
           </a>
         </li>
       
@@ -241,6 +241,171 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/14/View源码学习二/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/14/View源码学习二/" itemprop="url">
+                  View源码学习二
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-14T07:07:35+08:00">
+                2016-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="View"><a href="#View" class="headerlink" title="View"></a>View</h1><h4 id="重要Field"><a href="#重要Field" class="headerlink" title="重要Field"></a>重要Field</h4><ul>
+<li>protected ViewParent mParent</li>
+<li>AttachInfo mAttachInfo</li>
+<li>protected ViewGroup.LayoutParams mLayoutParams</li>
+<li>TransformationInfo mTransformationInfo</li>
+<li>private StateListAnimator mStateListAnimator</li>
+<li>private PerformClick mPerformClick</li>
+<li>public static final int LAYER_TYPE_NONE</li>
+<li>final RenderNode mRenderNode(感觉很重要)</li>
+</ul>
+<h3 id="重要的内部类"><a href="#重要的内部类" class="headerlink" title="重要的内部类"></a>重要的内部类</h3><ul>
+<li>TintInfo(主要包含 ColorStateList PorterDuff.Mode)</li>
+</ul>
+<h5 id="ListenerInfo"><a href="#ListenerInfo" class="headerlink" title="ListenerInfo"></a>ListenerInfo</h5><h6 id="OnFocusChangeListener"><a href="#OnFocusChangeListener" class="headerlink" title="OnFocusChangeListener"></a>OnFocusChangeListener</h6><p>protected OnFocusChangeListener mOnFocusChangeListener</p>
+<ul>
+<li>void onFocusChange(View v, boolean hasFocus)</li>
+</ul>
+<h6 id="OnLayoutChangeListener"><a href="#OnLayoutChangeListener" class="headerlink" title="OnLayoutChangeListener"></a>OnLayoutChangeListener</h6><p>private ArrayList&lt;OnLayoutChangeListener&gt; mOnLayoutChangeListeners;</p>
+<ul>
+<li>onLayoutChange</li>
+</ul>
+<h6 id="OnGenericMotionListener"><a href="#OnGenericMotionListener" class="headerlink" title="OnGenericMotionListener"></a>OnGenericMotionListener</h6><p>用来处理鼠标滚轮</p>
+<ul>
+<li>onGenericMotion</li>
+</ul>
+<h6 id="OnHoverListener"><a href="#OnHoverListener" class="headerlink" title="OnHoverListener"></a>OnHoverListener</h6><p>用于处理鼠标悬停事件</p>
+<ul>
+<li>boolean onHover(View v, MotionEvent event);</li>
+</ul>
+<h5 id="AttachInfo"><a href="#AttachInfo" class="headerlink" title="AttachInfo"></a>AttachInfo</h5><h6 id="InvalidateInfo"><a href="#InvalidateInfo" class="headerlink" title="InvalidateInfo"></a>InvalidateInfo</h6><p>用于post一个 invalidate(int, int, int, int) messages 给Handler。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="number">76</span> </div><div class="line"><span class="number">77</span>     <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">More</span> ...<span class="title">SimplePool</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Pool</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line"><span class="number">78</span>         <span class="keyword">private</span> <span class="keyword">final</span> Object[] mPool;</div><div class="line"><span class="number">79</span> </div><div class="line"><span class="number">80</span>         <span class="keyword">private</span> <span class="keyword">int</span> mPoolSize;</div><div class="line"></div><div class="line">        </div><div class="line">Creates a <span class="keyword">new</span> instance.</div><div class="line">Parameters:</div><div class="line">maxPoolSize The max pool size.</div><div class="line">Throws:</div><div class="line">java.lang.IllegalArgumentException If the max pool size is less than zero.</div><div class="line"><span class="number">88</span> </div><div class="line"><span class="number">89</span>         <span class="keyword">public</span> More ...SimplePool(<span class="keyword">int</span> maxPoolSize) &#123;</div><div class="line"><span class="number">90</span>             <span class="keyword">if</span> (maxPoolSize &lt;= <span class="number">0</span>) &#123;</div><div class="line"><span class="number">91</span>                 <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"The max pool size must be &gt; 0"</span>);</div><div class="line"><span class="number">92</span>             &#125;</div><div class="line"><span class="number">93</span>             mPool = <span class="keyword">new</span> Object[maxPoolSize];</div><div class="line"><span class="number">94</span>         &#125;</div><div class="line"><span class="number">95</span> </div><div class="line"><span class="number">96</span>         <span class="meta">@Override</span></div><div class="line"><span class="number">97</span>         <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</div><div class="line"><span class="number">98</span>         <span class="keyword">public</span> T More ...acquire() &#123;</div><div class="line"><span class="number">99</span>             <span class="keyword">if</span> (mPoolSize &gt; <span class="number">0</span>) &#123;</div><div class="line"><span class="number">100</span>                <span class="keyword">final</span> <span class="keyword">int</span> lastPooledIndex = mPoolSize - <span class="number">1</span>;</div><div class="line"><span class="number">101</span>                T instance = (T) mPool[lastPooledIndex];</div><div class="line"><span class="number">102</span>                mPool[lastPooledIndex] = <span class="keyword">null</span>;</div><div class="line"><span class="number">103</span>                mPoolSize--;</div><div class="line"><span class="number">104</span>                <span class="keyword">return</span> instance;</div><div class="line"><span class="number">105</span>            &#125;</div><div class="line"><span class="number">106</span>            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line"><span class="number">107</span>        &#125;</div><div class="line"><span class="number">108</span></div><div class="line"><span class="number">109</span>        <span class="meta">@Override</span></div><div class="line"><span class="number">110</span>        <span class="keyword">public</span> <span class="keyword">boolean</span> More ...release(T instance) &#123;</div><div class="line"><span class="number">111</span>            <span class="keyword">if</span> (isInPool(instance)) &#123;</div><div class="line"><span class="number">112</span>                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Already in the pool!"</span>);</div><div class="line"><span class="number">113</span>            &#125;</div><div class="line"><span class="number">114</span>            <span class="keyword">if</span> (mPoolSize &lt; mPool.length) &#123;</div><div class="line"><span class="number">115</span>                mPool[mPoolSize] = instance;</div><div class="line"><span class="number">116</span>                mPoolSize++;</div><div class="line"><span class="number">117</span>                <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line"><span class="number">118</span>            &#125;</div><div class="line"><span class="number">119</span>            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"><span class="number">120</span>        &#125;</div><div class="line"><span class="number">121</span></div><div class="line"><span class="number">122</span>        <span class="keyword">private</span> <span class="keyword">boolean</span> More ...isInPool(T instance) &#123;</div><div class="line"><span class="number">123</span>            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mPoolSize; i++) &#123;</div><div class="line"><span class="number">124</span>                <span class="keyword">if</span> (mPool[i] == instance) &#123;</div><div class="line"><span class="number">125</span>                    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line"><span class="number">126</span>                &#125;</div><div class="line"><span class="number">127</span>            &#125;</div><div class="line"><span class="number">128</span>            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"><span class="number">129</span>        &#125;</div><div class="line"><span class="number">130</span>    &#125;</div></pre></td></tr></table></figure>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ul>
+<li>View(Context context)</li>
+</ul>
+<p>简单通过context获取到resource，简单初始化了两个Flags，给mTouchSlop赋值，设置了滚动模式，初始化了mRenderNode,并根据targetSdkVersion对一些兼容性进行初始化,4个兼容性。<br><code>context.getApplicationInfo().targetSdkVersion</code></p>
+<ul>
+<li><p>View(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes)</p>
+</li>
+<li><p>setImportantForAccessibility()这个是有关于辅助功能的</p>
+</li>
+<li>notifySubtreeAccessibilityStateChangedIfNeeded()</li>
+<li>notifyViewAccessibilityStateChangedIfNeeded()</li>
+<li>onClick属性是使用反射机制实现的</li>
+</ul>
+<h3 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法"></a>一些方法</h3><h4 id="performClick"><a href="#performClick" class="headerlink" title="performClick()"></a>performClick()</h4><p>该方法会触发三个比较重要的方法，一个是playSoundEffect(),一个是onClick(),一个是sendAccessibilityEvent()。其中第一个跟AttachInfo有关，第二个跟ListenerInfo有关，第三个跟<br>AccessibilityDelegate有关。</p>
+<h4 id="callOnClick"><a href="#callOnClick" class="headerlink" title="callOnClick()"></a>callOnClick()</h4><p>跟performClick()不同，只会触发onClick()</p>
+<h4 id="performLongClick"><a href="#performLongClick" class="headerlink" title="performLongClick()"></a>performLongClick()</h4><p>会调用<code>sendAccessibilityEvent()</code>，当该view没有消费<code>onLongClick()</code>方法时，及返回false，就会调用<code>showContextMenu()</code>方法，否则调用<code>performHapticFeedback()</code>。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/12/Annotation学习/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +446,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-12T20:07:07+08:00">
                 2016-06-12
@@ -434,7 +599,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-07T15:39:16+08:00">
                 2016-06-07
@@ -569,7 +734,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-06T07:16:04+08:00">
                 2016-06-06
@@ -724,7 +889,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-31T07:45:23+08:00">
                 2016-05-31
@@ -876,7 +1041,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-30T19:02:36+08:00">
                 2016-05-30
@@ -1002,7 +1167,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-29T17:56:07+08:00">
                 2016-05-29
@@ -1121,7 +1286,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-29T17:46:47+08:00">
                 2016-05-29
@@ -1283,7 +1448,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-25T20:31:12+08:00">
                 2016-05-25
@@ -1409,7 +1574,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-25T19:56:35+08:00">
                 2016-05-25
@@ -1525,125 +1690,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/05/25/include标签/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="sola_sky">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Li's Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/25/include标签/" itemprop="url">
-                  include标签
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-25T09:52:05+08:00">
-                2016-05-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="include标签"><a href="#include标签" class="headerlink" title="include标签"></a>include标签</h1><p>在&lt;include&gt;标签当中，我们是可以覆写所有layout属性的，即include中指定的layout属性将会覆盖掉layout=”@layout/…”xml中指定的layout属性。<br>如果我们想要在&lt;include&gt;标签当中覆写layout属性，必须要将layout_width和layout_height这两个属性也进行覆写，否则覆写效果将不会生效。<br>还有就是当给include加id时，会覆写其引入的xml布局中的id，如果布局直接是一个控件，则该控件的id就变成了include设置的id，直接通过<code>findViewById()</code>传入include的id就能找到该控件。如果布局是一个ViewGroup，则该id就变变成了include设置的id，想找其下的子view时得通过<code>findViewById(include的id).findViewById(子控件的id)</code>这种方法找到子控件。<br>查了android官网上面有一句<strong>Overrides the ID given to the root view in the included layout.</strong></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1691,8 +1737,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">25</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">articles</span>
               </a>
             </div>
           
@@ -1709,7 +1755,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -1762,7 +1808,7 @@
 </div>
 
 <div class="theme-info">
-  Theme -
+  Thème -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>
