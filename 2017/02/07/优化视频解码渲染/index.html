@@ -1,0 +1,677 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="libyuv ffmpeg," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="问题的出现在项目中出现 了一个问题就android在使用ffmpeg进行视频的解码渲染的过程中耗时非常的严重，导致的直接现象就是视频播放过程中就像是慢动作回放一样，完全无法满足需求。而反观同事的ios却不会，观其代码，发现其调用ffmpeg的代码跟我这边是差不多的（都是参考网上的代码）。后来即使使用了高配的android手机，发现其效果还是无法满足需求。最后去看开源的ijkplayer，看其是怎么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="优化视频解码渲染">
+<meta property="og:url" content="http://solasky.info/2017/02/07/优化视频解码渲染/index.html">
+<meta property="og:site_name" content="Li's Blog">
+<meta property="og:description" content="问题的出现在项目中出现 了一个问题就android在使用ffmpeg进行视频的解码渲染的过程中耗时非常的严重，导致的直接现象就是视频播放过程中就像是慢动作回放一样，完全无法满足需求。而反观同事的ios却不会，观其代码，发现其调用ffmpeg的代码跟我这边是差不多的（都是参考网上的代码）。后来即使使用了高配的android手机，发现其效果还是无法满足需求。最后去看开源的ijkplayer，看其是怎么">
+<meta property="og:image" content="http://okxoqauma.bkt.clouddn.com/%E4%BC%98%E5%8C%96%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E6%B8%B2%E6%9F%93%E2%80%94%E2%80%94%E8%A7%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E8%BD%AC%E5%8C%96.png">
+<meta property="og:image" content="http://okxoqauma.bkt.clouddn.com/%E4%BC%98%E5%8C%96%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E6%B8%B2%E6%9F%93%E2%80%94%E2%80%94%E6%B8%B2%E6%9F%93%E9%83%A8%E5%88%86.png">
+<meta property="og:updated_time" content="2017-02-07T10:02:41.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="优化视频解码渲染">
+<meta name="twitter:description" content="问题的出现在项目中出现 了一个问题就android在使用ffmpeg进行视频的解码渲染的过程中耗时非常的严重，导致的直接现象就是视频播放过程中就像是慢动作回放一样，完全无法满足需求。而反观同事的ios却不会，观其代码，发现其调用ffmpeg的代码跟我这边是差不多的（都是参考网上的代码）。后来即使使用了高配的android手机，发现其效果还是无法满足需求。最后去看开源的ijkplayer，看其是怎么">
+<meta name="twitter:image" content="http://okxoqauma.bkt.clouddn.com/%E4%BC%98%E5%8C%96%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E6%B8%B2%E6%9F%93%E2%80%94%E2%80%94%E8%A7%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E8%BD%AC%E5%8C%96.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://solasky.info/2017/02/07/优化视频解码渲染/"/>
+
+
+
+
+
+  <title> 优化视频解码渲染 | Li's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Li's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2017/02/07/优化视频解码渲染/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                优化视频解码渲染
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T09:05:35+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="问题的出现"><a href="#问题的出现" class="headerlink" title="问题的出现"></a>问题的出现</h2><p>在项目中出现 了一个问题就android在使用ffmpeg进行视频的解码渲染的过程中耗时非常的严重，导致的直接现象就是视频播放过程中就像是慢动作回放一样，完全无法满足需求。而反观同事的ios却不会，观其代码，发现其调用ffmpeg的代码跟我这边是差不多的（都是参考网上的代码）。后来即使使用了高配的android手机，发现其效果还是无法满足需求。最后去看开源的ijkplayer，看其是怎么解决的。</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>在研究ijkplayer的源码过程中找到了解决方案（只针对FFmpeg、ANativeWindow，并且没有使用OpenGL）：</p>
+<ul>
+<li>优先采用的是libyuv来进行视频的格式转换的，当无法转换时再采用ffmpeg的<code>sws_scale()</code>进行转化。而且发现这种方案在ijkplayer源码中只是针对android平台，而苹果的直接是使用ffmpeg的<code>sws_sclae()</code>方法，不需要使用libyuv，至于为什么苹果不需要没有去深究，效率肯定是够了。</li>
+<li>长宽进行针对不同格式进行对齐操作，不过这块倒是没有去测试过到底快了多少。</li>
+<li>原先在进行缩放的时候也使用了libyuv对视频进行缩放，将视频长宽缩放到传进来的Surface的长宽，但是实际发现不需要这样做，<code>ANativeWindow_setBuffersGeomerty()</code>这个函数会将尺寸自动缩放到窗口实际的物理尺寸。这样就省了libyuv进行缩放操作的时间了</li>
+<li>还有一个就是进行音视频同步，因为部分帧会解码快、部分比较耗时，通过音视频同步可以控制刷新的快慢或者直接丢帧。</li>
+<li>通过多线程的方式，一个线程用于解码格式转换，一个线程用于专门的刷新操作，这样的并行操作相比于串行操作来会缩短一些时间</li>
+</ul>
+<p>接下来，看看具体的代码：</p>
+<h3 id="1-使用libyuv替换ffmpeg的sws-scale"><a href="#1-使用libyuv替换ffmpeg的sws-scale" class="headerlink" title="1. 使用libyuv替换ffmpeg的sws_scale"></a>1. 使用libyuv替换ffmpeg的<code>sws_scale</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> VoutOverlay::ImageConvert(<span class="keyword">int</span> width, <span class="keyword">int</span> height, AVPixelFormat dst_format, <span class="keyword">uint8_t</span> **dst_data,</div><div class="line">                               <span class="keyword">int</span> *dst_linesize, AVPixelFormat src_format, <span class="keyword">uint8_t</span> **src_data,</div><div class="line">                               <span class="keyword">const</span> <span class="keyword">int</span> *src_linesize) &#123;</div><div class="line">    <span class="keyword">if</span> (AV_PIX_FMT_YUV420P == src_format) &#123;</div><div class="line">        <span class="keyword">if</span> (AV_PIX_FMT_RGB565 == dst_format) &#123;</div><div class="line">            <span class="keyword">return</span> libyuv::I420ToRGB565(src_data[<span class="number">0</span>], src_linesize[<span class="number">0</span>],</div><div class="line">                                        src_data[<span class="number">1</span>], src_linesize[<span class="number">1</span>],</div><div class="line">                                        src_data[<span class="number">2</span>], src_linesize[<span class="number">2</span>],</div><div class="line">                                        dst_data[<span class="number">0</span>], dst_linesize[<span class="number">0</span>],</div><div class="line">                                        width, height);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (AV_PIX_FMT_0BGR32) &#123;</div><div class="line">            <span class="keyword">return</span> libyuv::I420ToABGR(src_data[<span class="number">0</span>], src_linesize[<span class="number">0</span>],</div><div class="line">                                      src_data[<span class="number">1</span>], src_linesize[<span class="number">1</span>],</div><div class="line">                                      src_data[<span class="number">2</span>], src_linesize[<span class="number">2</span>],</div><div class="line">                                      dst_data[<span class="number">0</span>], dst_linesize[<span class="number">0</span>],</div><div class="line">                                      width, height);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为P2P端传过来的视频是YUV420P的格式，这里也只简单判断进行YUV420P转其他格式，这里也是参考ijkplayer写的。这里解释一下libyuv的参数的意思，<code>I420ToRGB565()</code>中的第一参数<code>src_data[0]</code>代表Y分量，<code>src_linesize[0]</code>代表Y分量的长度，剩下的分别代表U、V分量，而最终转化成RGB565时图像数据是放在一个数组进行存储的，所以只需要<code>dst_data[0]</code>一个数组就行。详细内容可以上网搜索一下YUV和RGB资料。</p>
+<h3 id="2-对长宽进行对齐操作"><a href="#2-对长宽进行对齐操作" class="headerlink" title="2. 对长宽进行对齐操作"></a>2. 对长宽进行对齐操作</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">VoutOverlay::VoutOverlay(<span class="keyword">int</span> width, <span class="keyword">int</span> height, AVPixelFormat frame_format) : width_(width), height_(height), format_(frame_format) &#123;</div><div class="line">    opaque_ = <span class="keyword">new</span> VoutOverlayOpaque();</div><div class="line">    pitches_ = opaque_-&gt;pitches();</div><div class="line">    pixels_ = opaque_-&gt;pixels();</div><div class="line">  </div><div class="line">    ··· ··· </div><div class="line"></div><div class="line">    <span class="keyword">if</span> (AV_PIX_FMT_RGB565 == frame_format) &#123;</div><div class="line">        buf_width = ALIGN(width, <span class="number">8</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (AV_PIX_FMT_RGBA == frame_format) &#123;</div><div class="line">        buf_width = ALIGN(width, <span class="number">4</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        buf_width = ALIGN(width, <span class="number">16</span>)；</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ··· ···</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>根据ijkplayer上的提示是<strong>16 bytes align pitch for arm-neon image-convert</strong>，所以最终用于存储转化的视频图像的字节数是16的倍数，因此需要对缓存的宽度进行调整。比如当最终转化为RGB565时，宽度需要是8的倍数，因为RGB565格式是每个像素占用2个字节，所以宽度调整为8的倍数时就能保证最终图像的字节数是16的倍数（n <em> 8 </em> 2 == n <em> 16）。又比如为RGBA时，每个像素占用4字节，所以调整宽度为4的倍数，这样就能确保最终图像是16的倍数（n </em> 4 <em> 4 = n </em> 16）。</p>
+<h3 id="3-使用ANativeWindow-setBuffersGeomerty-直接进行缩放"><a href="#3-使用ANativeWindow-setBuffersGeomerty-直接进行缩放" class="headerlink" title="3. 使用ANativeWindow_setBuffersGeomerty()直接进行缩放"></a>3. 使用<code>ANativeWindow_setBuffersGeomerty()</code>直接进行缩放</h3><p>我原来是将视频图像格式YUV420P转化成RGB565后，再次利用libyuv对其进行缩放，以符合Surface的长宽，后面发现ANativeWindow_setBuffersGeometry()本身就有这个功能，不需要用到libyuv。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * Change the format and size of the window buffers.</div><div class="line"> *</div><div class="line"> * The width and height control the number of pixels in the buffers, not the</div><div class="line"> * dimensions of the window on screen.  If these are different than the</div><div class="line"> * window's physical size, then it buffer will be scaled to match that size</div><div class="line"> * when compositing it to the screen.</div><div class="line"> *</div><div class="line"> * For all of these parameters, if 0 is supplied then the window's base</div><div class="line"> * value will come back in force.</div><div class="line"> *</div><div class="line"> * width and height must be either both zero or both non-zero.</div><div class="line"> *</div><div class="line"> */</div><div class="line">ANativeWindow_setBuffersGeometry(native_window_, buff_w, buff_h, WINDOW_FORMAT_RGB_565);</div></pre></td></tr></table></figure>
+<h3 id="4-音视频同步"><a href="#4-音视频同步" class="headerlink" title="4. 音视频同步"></a>4. 音视频同步</h3><p>音视频同步，其本质是通过比较时间来控制视频的刷新频率，由于某帧导致视频整体慢了，那就缩短后面的视频帧的刷新时间间隔，以此弥补之前的耗时。<a href="http://solasky.info/2017/02/06/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%90%8C%E6%AD%A5%E6%8A%80%E6%9C%AF/">音视频同步可以看之前写的一篇文章</a>。</p>
+<h3 id="5-多线程操作"><a href="#5-多线程操作" class="headerlink" title="5. 多线程操作"></a>5. 多线程操作</h3><h4 id="解码和格式转化线程："><a href="#解码和格式转化线程：" class="headerlink" title="解码和格式转化线程："></a>解码和格式转化线程：</h4><p><img src="http://okxoqauma.bkt.clouddn.com/%E4%BC%98%E5%8C%96%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E6%B8%B2%E6%9F%93%E2%80%94%E2%80%94%E8%A7%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E8%BD%AC%E5%8C%96.png" alt=""></p>
+<p>在一个线程中不断循环执行这一步，不断的获取图片存放于缓存队列中。</p>
+<p>具体的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">for</span> (;;) &#123;</div><div class="line">      ret = is-&gt;GetVideoFrame(ffp, frame); <span class="comment">// 从AVPacket队列中取一个AVPacket，然后解析到frame中</span></div><div class="line">      <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</div><div class="line">          av_frame_free(&amp;frame);</div><div class="line">          <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (!ret) &#123;</div><div class="line">          <span class="keyword">continue</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">··· ··· </div><div class="line">      ret = is-&gt;QueuePicture(ffp, frame, pts, duration, av_frame_get_pkt_pos(frame),</div><div class="line">                             is-&gt;pviddec()-&gt;pkt_serial()); <span class="comment">// 将frame转化成预期的格式，然后存入图片队列中</span></div><div class="line">      av_frame_unref(frame);</div><div class="line">      <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</div><div class="line">          <span class="keyword">break</span>;</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h4 id="视频渲染线程："><a href="#视频渲染线程：" class="headerlink" title="视频渲染线程："></a>视频渲染线程：</h4><p><img src="http://okxoqauma.bkt.clouddn.com/%E4%BC%98%E5%8C%96%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E6%B8%B2%E6%9F%93%E2%80%94%E2%80%94%E6%B8%B2%E6%9F%93%E9%83%A8%E5%88%86.png" alt=""></p>
+<p>视频渲染线程就是不断从图片缓存队列中提取数据，然后根据调整好的时间间隔进行渲染。</p>
+<p>具体代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span>* FFPlayer::VideoRefreshThread(<span class="keyword">void</span> *arg) &#123;</div><div class="line">    assert(arg);</div><div class="line">    FFPlayer *player = (FFPlayer *) arg;</div><div class="line">    VideoState *is = player-&gt;is();</div><div class="line">    <span class="keyword">double</span> remaining_time = <span class="number">0.0</span>;</div><div class="line">    <span class="keyword">while</span> (!is-&gt;abort_request()) &#123;</div><div class="line">        <span class="keyword">if</span> (remaining_time &gt; <span class="number">0.0</span>) &#123;</div><div class="line">            av_usleep((<span class="keyword">int</span>)(<span class="keyword">int64_t</span>)(remaining_time * <span class="number">1000000.0</span>)); <span class="comment">// 根据调整的时间间隔睡眠一段时间</span></div><div class="line">        &#125;</div><div class="line">        remaining_time = <span class="number">0.01</span>;</div><div class="line">        <span class="keyword">if</span> (is-&gt;show_mode() == SHOW_MODE_VIDEO &amp;&amp; (!is-&gt;paused() || is-&gt;force_refresh())) &#123;</div><div class="line">            is-&gt;VideoRefresh(player, &amp;remaining_time);  <span class="comment">// VideoRefresh()函数会做出一些操作，包括计算延迟，是否丢帧以及是否刷新等。</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>VidoeRefresh()</code>函数的相关可以查看之前的一篇文章——<a href="http://solasky.info/2017/02/06/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%90%8C%E6%AD%A5%E6%8A%80%E6%9C%AF/">音视频同步技术</a>。</p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>性能优化这块还可以采用硬编码的形式，不过目前没有去研究；还有可以通过OpenGL来实现，我看ijkplayer上就优先有这种方案。后期可以继续学习ijkplayer的源码，还可以去看看vlc的源码。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/libyuv-ffmpeg/" rel="tag"># libyuv ffmpeg</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/06/音视频同步技术/" rel="next" title="音视频同步技术">
+                <i class="fa fa-chevron-left"></i> 音视频同步技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/08/音视频的控制/" rel="prev" title="音视频的控制">
+                音视频的控制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
+               alt="sola_sky" />
+          <p class="site-author-name" itemprop="name">sola_sky</p>
+          <p class="site-description motion-element" itemprop="description">学习记录和总结</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的出现"><span class="nav-number">1.</span> <span class="nav-text">问题的出现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决办法"><span class="nav-number">2.</span> <span class="nav-text">解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用libyuv替换ffmpeg的sws-scale"><span class="nav-number">2.1.</span> <span class="nav-text">1. 使用libyuv替换ffmpeg的sws_scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-对长宽进行对齐操作"><span class="nav-number">2.2.</span> <span class="nav-text">2. 对长宽进行对齐操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用ANativeWindow-setBuffersGeomerty-直接进行缩放"><span class="nav-number">2.3.</span> <span class="nav-text">3. 使用ANativeWindow_setBuffersGeomerty()直接进行缩放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-音视频同步"><span class="nav-number">2.4.</span> <span class="nav-text">4. 音视频同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-多线程操作"><span class="nav-number">2.5.</span> <span class="nav-text">5. 多线程操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解码和格式转化线程："><span class="nav-number">2.5.1.</span> <span class="nav-text">解码和格式转化线程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#视频渲染线程："><span class="nav-number">2.5.2.</span> <span class="nav-text">视频渲染线程：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">3.</span> <span class="nav-text">补充</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  Sat May 21 2016 08:00:00 GMT+0800 (中国标准时间) - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sola_sky</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

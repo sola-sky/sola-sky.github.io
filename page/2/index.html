@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Home
           </a>
         </li>
       
@@ -241,6 +241,280 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/20/java注解处理器学习/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/20/java注解处理器学习/" itemprop="url">
+                  java注解处理器学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T20:53:25+08:00">
+                2016-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><ul>
+<li><a href="http://2dxgujun.com/post/2015/06/07/butterknife-analysis.html" target="_blank" rel="external">butterknife 源码分析</a></li>
+<li><a href="https://bxbxbai.github.io/2016/03/12/how-butterknife-works/" target="_blank" rel="external">最新ButterKnife框架原理</a></li>
+<li><a href="http://www.race604.com/annotation-processing/" target="_blank" rel="external">Java注解处理器</a></li>
+</ul>
+<h5 id="AbstractProcessor"><a href="#AbstractProcessor" class="headerlink" title="AbstractProcessor"></a>AbstractProcessor</h5><ul>
+<li><code>init(ProcessingEnvironment env)</code>: 这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Types和Filer。</li>
+<li><code>process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env)</code>: 这相当于每个处理器的主函数main()。你在这里写你的扫描、评估和处理注解的代码，以及生成Java文件。输入参数RoundEnviroment，可以让你查询出包含特定注解的被注解元素。</li>
+</ul>
+<h5 id="注册你的处理器"><a href="#注册你的处理器" class="headerlink" title="注册你的处理器"></a>注册你的处理器</h5><p>你可能会问，我怎样将处理器MyProcessor注册到javac中。你必须提供一个.jar文件。就像其他.jar文件一样，你打包你的注解处理器到此文件中。并且，在你的jar中，你需要打包一个特定的文件javax.annotation.processing.Processor到META-INF/services路径下.<br>打包进MyProcessor.jar中的javax.annotation.processing.Processor的内容是，注解处理器的合法的全名列表，每一个元素换行分割:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">com.example.MyProcessor</div><div class="line">com.foo.OtherProcessor</div><div class="line">net.blabla.SpecialProcessor</div></pre></td></tr></table></figure>
+<p>把MyProcessor.jar放到你的builpath中，javac会自动检查和读取javax.annotation.processing.Processor中的内容，并且注册MyProcessor作为注解处理器。</p>
+<ul>
+<li>@Target(ElementType.TYPE)   //接口、类、枚举、注解</li>
+<li>@Target(ElementType.FIELD) //字段、枚举的常量</li>
+<li>@Target(ElementType.METHOD) //方法</li>
+<li>@Target(ElementType.PARAMETER) //方法参数</li>
+<li>@Target(ElementType.CONSTRUCTOR)  //构造函数</li>
+<li>@Target(ElementType.LOCAL_VARIABLE)//局部变量</li>
+<li>@Target(ElementType.ANNOTATION_TYPE)//注解</li>
+<li>@Target(ElementType.PACKAGE) ///包   </li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/20/androi全屏显示/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/20/androi全屏显示/" itemprop="url">
+                  android全屏显示
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T19:15:25+08:00">
+                2016-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="第一种方式"><a href="#第一种方式" class="headerlink" title="第一种方式"></a>第一种方式</h3><p>通过<code>WindowManager.LayoutParams.FLAG_FULLSCREEN</code>来实现全屏功能<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);</div></pre></td></tr></table></figure></p>
+<h3 id="第二种方式"><a href="#第二种方式" class="headerlink" title="第二种方式"></a>第二种方式</h3><p>从3.0版本之后，系统DecorView提供了一个<code>setSystemUiVisibility()</code>方法，可以通过设置Flag改变SystemUI的属性</p>
+<p>从19之后，为<code>setSystemUiVisibility()</code>引入了新的标签<code>SYSTEM_UI_FLAG_IMMERSIVE</code>和<code>SYSTEM_UI_FLAG_IMMERSIVE_STICKY</code>，标签与<code>SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>和<code>SYSTEM_UI_FLAG_FULLSCREEN</code>一起使用的时候可以达到全屏的效果。</p>
+<h6 id="SYSTEM-UI-FLAG-IMMERSIVE"><a href="#SYSTEM-UI-FLAG-IMMERSIVE" class="headerlink" title="SYSTEM_UI_FLAG_IMMERSIVE"></a>SYSTEM_UI_FLAG_IMMERSIVE</h6><p>用户可以通过在边缘区域向内滑动来让系统栏重新显示,并清空<code>SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>和<code>SYSTEM_UI_FLAG_FULLSCREEN</code>标签，还会触发<code>View.OnSystemUiVisibilityChangeListener</code>。系统栏显示后就不会自动隐藏了，必须通过手动设置。</p>
+<h6 id="SYSTEM-UI-FLAG-IMMERSIVE-STICKY"><a href="#SYSTEM-UI-FLAG-IMMERSIVE-STICKY" class="headerlink" title="SYSTEM_UI_FLAG_IMMERSIVE_STICKY"></a>SYSTEM_UI_FLAG_IMMERSIVE_STICKY</h6><p>当使用了SYSTEM_UI_FLAG_IMMERSIVE_STICKY标签的时候，向内滑动的操作会让系统栏临时显示，并处于半透明的状态。此时没有标签会被清除，系统UI可见性监听器也不会被触发。如果用户没有进行操作，系统栏会在一段时间内自动隐藏。因为，因为在这个模式下展示的系统栏是处于暂时(transient)的状态。</p>
+<h6 id="其他一些标签"><a href="#其他一些标签" class="headerlink" title="其他一些标签"></a>其他一些标签</h6><ul>
+<li>View.SYSTEM_UI_FLAG_LAYOUT_STABLE</li>
+<li>View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION</li>
+<li>View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</li>
+</ul>
+<p>标签可以使当系统UI出现时不会导致Activity UI重新layout。</p>
+<p><strong>注意：目前测试发现，当全屏后，按下电源键待机后再点亮屏幕，发现全屏有问题，不会实现全屏，而是没有全屏之前的设置。</strong></p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><ul>
+<li><a href="http://hukai.me/android-training-course-in-chinese/ui/system-ui/immersive.html" target="_blank" rel="external">全屏沉浸式</a></li>
+<li><a href="http://angeldevil.me/2014/09/02/About-Status-Bar-and-Navigation-Bar/" target="_blank" rel="external">与Status Bar和Navigation Bar相关的一些东西</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/14/View源码学习二/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +555,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-14T07:07:35+08:00">
                 2016-06-14
@@ -446,7 +720,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-12T20:07:07+08:00">
                 2016-06-12
@@ -599,7 +873,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-07T15:39:16+08:00">
                 2016-06-07
@@ -734,7 +1008,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-06T07:16:04+08:00">
                 2016-06-06
@@ -889,7 +1163,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-31T07:45:23+08:00">
                 2016-05-31
@@ -1041,7 +1315,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-30T19:02:36+08:00">
                 2016-05-30
@@ -1167,7 +1441,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-29T17:56:07+08:00">
                 2016-05-29
@@ -1286,7 +1560,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-29T17:46:47+08:00">
                 2016-05-29
@@ -1399,297 +1673,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/05/25/单例模式之DCL/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="sola_sky">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Li's Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/25/单例模式之DCL/" itemprop="url">
-                  单例模式之DCL
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posté le</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-25T20:31:12+08:00">
-                2016-05-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h3><p>1.给SingletonExample的实例分配内存。</p>
-<p>2.初始化SingletonExample的构造器</p>
-<p>3.将instance对象指向分配的内存空间（注意到这步instance就非null了）。</p>
-<p>但是，由于Java编译器允许处理器乱序执行（out-of-order），以及JDK1.5之前JMM（Java Memory Medel）中Cache、寄存器到主内存回写顺序的规定，上面的第二点和第三点的顺序是无法保证的，也就是说，执行顺序可能是1-2-3也可能是1-3-2，如果是后者，并且在3执行完毕、2未执行之前，被切换到线程二上，这时候instance因为已经在线程一内执行过了第三点，instance已经是非空了，所以线程二直接拿走instance，然后使用，然后顺理成章地报错，而且这种难以跟踪难以重现的错误估计调试上一星期都未必能找得出来，真是一茶几的杯具啊。</p>
-<h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><ol>
-<li><a href="http://http://www.cnblogs.com/techyc/p/3529983.html" target="_blank" rel="external">浅谈设计模式</a></li>
-<li><a href="http://http://www.race604.com/java-double-checked-singleton" target="_blank" rel="external">Java 单例真的写对了么?</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/05/25/判断android处于前台还是后台/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="sola_sky">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Li's Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/25/判断android处于前台还是后台/" itemprop="url">
-                  判断android处于前台还是后台
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posté le</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-25T19:56:35+08:00">
-                2016-05-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="方法一-通过RunningTask"><a href="#方法一-通过RunningTask" class="headerlink" title="方法一 通过RunningTask"></a>方法一 通过RunningTask</h3><h6 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h6><p>当一个App处于前台的时候，会处于RunningTask的这个栈的栈顶，所以我们可以取出RunningTask的栈顶的任务进程，看他与我们的想要判断的App的包名是否相同，来达到效果。</p>
-<h6 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h6><p>getRunningTask方法在Android5.0以上已经被废弃，只会返回自己和系统的一些不敏感的task，不再返回其他应用的task，用此方法来判断自身App是否处于后台，仍然是有效的，但是无法判断其他应用是否位于前台，因为不再能获取信息。</p>
-<h6 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">List&lt;ActivityManager.RunningTaskInfo&gt; taskInfo = am.getRunningTasks(<span class="number">1</span>);</div><div class="line">           ComponentName componentInfo = taskInfo.get(<span class="number">0</span>).topActivity;</div><div class="line">           <span class="keyword">if</span> (componentInfo.getPackageName().equals(context.getPackageName())) &#123;</div><div class="line">               isInBackground = <span class="keyword">false</span>;</div><div class="line">           &#125;</div></pre></td></tr></table></figure>
-<h3 id="方法二-通过RunningProcess"><a href="#方法二-通过RunningProcess" class="headerlink" title="方法二 通过RunningProcess"></a>方法二 通过RunningProcess</h3><h6 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h6><p>通过runningProcess获取到一个当前正在运行的进程的List，我们遍历这个List中的每一个进程，判断这个进程的一个importance 属性是否是前台进程，并且包名是否与我们判断的APP的包名一样，如果这两个条件都符合，那么这个App就处于前台</p>
-<h6 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h6><p>在聊天类型的App中，常常需要常驻后台来不间断的获取服务器的消息，这就需要我们把Service设置成START_STICKY，kill 后会被重启（等待5秒左右）来保证Service常驻后台。如果Service设置了这个属性，这个App的进程就会被判断是前台，代码上的表现就是appProcess.importance的值永远是 ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND，这样就永远无法判断出到底哪个是前台了。</p>
-<h6 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">List&lt;ActivityManager.RunningAppProcessInfo&gt; runningProcesses = am.getRunningAppProcesses();</div><div class="line">           <span class="keyword">for</span> (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) &#123;</div><div class="line">               <span class="keyword">if</span> (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) &#123;</div><div class="line">                   <span class="keyword">for</span> (String activeProcess : processInfo.pkgList) &#123;</div><div class="line">                       <span class="keyword">if</span> (activeProcess.equals(context.getPackageName())) &#123;</div><div class="line">                           isInBackground = <span class="keyword">false</span>;</div><div class="line">                       &#125;</div><div class="line">                   &#125;</div><div class="line">               &#125;</div><div class="line">           &#125;</div></pre></td></tr></table></figure>
-<h3 id="方法三-通过ActivityLifecycleCallbacks"><a href="#方法三-通过ActivityLifecycleCallbacks" class="headerlink" title="方法三 通过ActivityLifecycleCallbacks"></a>方法三 通过ActivityLifecycleCallbacks</h3><h6 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h6><p>AndroidSDK14在Application类里增加了ActivityLifecycleCallbacks，我们可以通过这个Callback拿到App所有Activity的生命周期回调。<br>可能还有人在纠结，我用back键切到后台和用Home键切到后台，一样吗？以上方法适用吗？在Android应用开发中一般认为back键是可以捕获的，而Home键是不能捕获的（除非修改framework）,但是上述方法从Activity生命周期着手解决问题，虽然这两种方式的Activity生命周期并不相同，但是二者都会执行onStop（）；所以并不关心到底是触发了哪个键切入后台的。另外,Application是否被销毁,都不会影响判断的正确性</p>
-<h6 id="用法-2"><a href="#用法-2" class="headerlink" title="用法"></a>用法</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span></span>&#123;</div><div class="line">        Foreground.init(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ActivityLifecycleCallbacks</span> </span>&#123;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(Activity activity, Bundle savedInstanceState)</span></span>;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivityStarted</span><span class="params">(Activity activity)</span></span>;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivityResumed</span><span class="params">(Activity activity)</span></span>;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivityPaused</span><span class="params">(Activity activity)</span></span>;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivityStopped</span><span class="params">(Activity activity)</span></span>;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivitySaveInstanceState</span><span class="params">(Activity activity, Bundle outState)</span></span>;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onActivityDestroyed</span><span class="params">(Activity activity)</span></span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h3 id="方法四-通过使用UsageStatsManager获取"><a href="#方法四-通过使用UsageStatsManager获取" class="headerlink" title="方法四 通过使用UsageStatsManager获取"></a>方法四 通过使用UsageStatsManager获取</h3><p>####### 原理</p>
-<p>通过使用UsageStatsManager获取，此方法是Android5.0之后提供的新API，可以获取一个时间段内的应用统计信息，但是必须满足一下要求</p>
-<ul>
-<li>此方法只在android5.0以上有效</li>
-<li>AndroidManifest中加入此权限 &lt;uses-permission xmlns:tools=”<a href="http://schemas.android.com/tools" target="_blank" rel="external">http://schemas.android.com/tools</a>“ android:name=”android.permission.PACKAGE_USAGE_STATS” tools:ignore=”ProtectedPermissions” /&gt;</li>
-</ul>
-<h3 id="方法五-通过Android自带的无障碍功能"><a href="#方法五-通过Android自带的无障碍功能" class="headerlink" title="方法五 通过Android自带的无障碍功能"></a>方法五 通过Android自带的无障碍功能</h3><h6 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h6><p>Android 辅助功能(AccessibilityService) 为我们提供了一系列的事件回调，帮助我们指示一些用户界面的状态变化。 我们可以派生辅助功能类，进而对不同的 AccessibilityEvent 进行处理。 同样的，这个服务就可以用来判断当前的前台应用。</p>
-<h6 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h6><ol>
-<li>AccessibilityService 有非常广泛的 ROM 覆盖，特别是非国产手机，从 Android API Level 8(Android 2.2) 到 Android Api Level 23(Android 6.0)。</li>
-<li>AccessibilityService 不再需要轮询的判断当前的应用是不是在前台，系统会在窗口状态发生变化的时候主动回调，耗时和资源消耗都极小。</li>
-<li>不需要权限请求。</li>
-<li>它是一个稳定的方法，与 “方法6”读取 /proc 目录不同，它并非利用 Android 一些设计上的漏洞，可以长期使用的可能很大。</li>
-<li>可以用来判断任意应用甚至 Activity, PopupWindow, Dialog 对象是否处于前台。</li>
-</ol>
-<h6 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h6><ol>
-<li>需要要用户开启辅助功能。</li>
-<li>辅助功能会伴随应用被“强行停止”而剥夺。</li>
-</ol>
-<h3 id="方法六-读取Linux系统内核保存在-proc目录下的process进程信息"><a href="#方法六-读取Linux系统内核保存在-proc目录下的process进程信息" class="headerlink" title="方法六 读取Linux系统内核保存在/proc目录下的process进程信息"></a>方法六 读取Linux系统内核保存在/proc目录下的process进程信息</h3><h6 id="原理-4"><a href="#原理-4" class="headerlink" title="原理"></a>原理</h6><p>无意中看到乌云上有人提的一个漏洞，Linux系统内核会把process进程信息保存在/proc目录下，Shell命令去获取的他，再根据进程的属性判断是否为前台。</p>
-<h6 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h6><ol>
-<li>不需要任何权限。</li>
-<li>可以判断任意一个应用是否在前台，而不局限在自身应用。</li>
-</ol>
-<h6 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h6><ol>
-<li>当/proc下文件夹过多时,此方法是耗时操作</li>
-</ol>
-<h6 id="用法-3"><a href="#用法-3" class="headerlink" title="用法"></a>用法</h6><p>获取一系列正在运行的App的进程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;AndroidAppProcess&gt; processes = ProcessManager.getRunningAppProcesses();</div></pre></td></tr></table></figure>
-<p>获取任一正在运行的App进程的详细信息</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">AndroidAppProcess process = processes.get(location);</div><div class="line">String processName = process.name;</div><div class="line"></div><div class="line">Stat stat = process.stat();</div><div class="line"><span class="keyword">int</span> pid = stat.getPid();</div><div class="line"><span class="keyword">int</span> parentProcessId = stat.ppid();</div><div class="line"><span class="keyword">long</span> startTime = stat.stime();</div><div class="line"><span class="keyword">int</span> policy = stat.policy();</div><div class="line"><span class="keyword">char</span> state = stat.state();</div><div class="line"></div><div class="line">Statm statm = process.statm();</div><div class="line"><span class="keyword">long</span> totalSizeOfProcess = statm.getSize();</div><div class="line"><span class="keyword">long</span> residentSetSize = statm.getResidentSetSize();</div><div class="line"></div><div class="line">PackageInfo packageInfo = process.getPackageInfo(context, <span class="number">0</span>);</div><div class="line">String appName = packageInfo.applicationInfo.loadLabel(pm).toString();</div></pre></td></tr></table></figure>
-<p>判断是否在前台</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (ProcessManager.isMyProcessInTheForeground()) &#123;</div><div class="line">  <span class="comment">// do stuff</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>获取一系列正在运行的App进程的详细信息</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;ActivityManager.RunningAppProcessInfo&gt; processes = ProcessManager.getRunningAppProcessInfo(ctx);</div></pre></td></tr></table></figure>
-<h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><ul>
-<li><a href="https://github.com/wenmingvs/AndroidProcess" target="_blank" rel="external">wenmingvs/AndroidProcess</a></li>
-<li><a href="http://http://steveliles.github.io/is_my_android_app_currently_foreground_or_background.html" target="_blank" rel="external">Is my Android app currently foreground or background</a></li>
-<li><a href="http://tips.androidhive.info/2015/04/android-how-to-check-if-the-app-is-in-background-or-foreground/" target="_blank" rel="external">Android How to Check if the App is in Background or Foreground</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1737,8 +1720,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
-                <span class="site-state-item-name">articles</span>
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -1808,7 +1791,7 @@
 </div>
 
 <div class="theme-info">
-  Thème -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>

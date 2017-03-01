@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Annotation," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -84,34 +84,16 @@
 
 
 
-<meta name="description" content="参考：
-butterknife 源码分析
-最新ButterKnife框架原理
-Java注解处理器
-
-AbstractProcessor
-init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Type">
+<meta name="description" content="学习记录和总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java注解处理器学习">
-<meta property="og:url" content="http://solasky.info/2016/06/20/java注解处理器学习/index.html">
+<meta property="og:title" content="音视频的控制">
+<meta property="og:url" content="http://solasky.info/2017/02/08/音视频的控制/index.html">
 <meta property="og:site_name" content="Li's Blog">
-<meta property="og:description" content="参考：
-butterknife 源码分析
-最新ButterKnife框架原理
-Java注解处理器
-
-AbstractProcessor
-init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Type">
-<meta property="og:updated_time" content="2016-06-20T13:22:13.506Z">
+<meta property="og:description" content="学习记录和总结">
+<meta property="og:updated_time" content="2017-02-08T10:14:37.212Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java注解处理器学习">
-<meta name="twitter:description" content="参考：
-butterknife 源码分析
-最新ButterKnife框架原理
-Java注解处理器
-
-AbstractProcessor
-init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Type">
+<meta name="twitter:title" content="音视频的控制">
+<meta name="twitter:description" content="学习记录和总结">
 
 
 
@@ -139,13 +121,13 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
 
 
 
-  <link rel="canonical" href="http://solasky.info/2016/06/20/java注解处理器学习/"/>
+  <link rel="canonical" href="http://solasky.info/2017/02/08/音视频的控制/"/>
 
 
 
 
 
-  <title> java注解处理器学习 | Li's Blog </title>
+  <title> 音视频的控制 | Li's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -258,7 +240,7 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/20/java注解处理器学习/">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2017/02/08/音视频的控制/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="sola_sky">
@@ -282,7 +264,7 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
             
             
               
-                java注解处理器学习
+                音视频的控制
               
             
           </h1>
@@ -297,8 +279,8 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T20:53:25+08:00">
-                2016-06-20
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T10:02:19+08:00">
+                2017-02-08
               </time>
             
 
@@ -333,29 +315,7 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
       
 
       
-        <h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><ul>
-<li><a href="http://2dxgujun.com/post/2015/06/07/butterknife-analysis.html" target="_blank" rel="external">butterknife 源码分析</a></li>
-<li><a href="https://bxbxbai.github.io/2016/03/12/how-butterknife-works/" target="_blank" rel="external">最新ButterKnife框架原理</a></li>
-<li><a href="http://www.race604.com/annotation-processing/" target="_blank" rel="external">Java注解处理器</a></li>
-</ul>
-<h5 id="AbstractProcessor"><a href="#AbstractProcessor" class="headerlink" title="AbstractProcessor"></a>AbstractProcessor</h5><ul>
-<li><code>init(ProcessingEnvironment env)</code>: 这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Types和Filer。</li>
-<li><code>process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env)</code>: 这相当于每个处理器的主函数main()。你在这里写你的扫描、评估和处理注解的代码，以及生成Java文件。输入参数RoundEnviroment，可以让你查询出包含特定注解的被注解元素。</li>
-</ul>
-<h5 id="注册你的处理器"><a href="#注册你的处理器" class="headerlink" title="注册你的处理器"></a>注册你的处理器</h5><p>你可能会问，我怎样将处理器MyProcessor注册到javac中。你必须提供一个.jar文件。就像其他.jar文件一样，你打包你的注解处理器到此文件中。并且，在你的jar中，你需要打包一个特定的文件javax.annotation.processing.Processor到META-INF/services路径下.<br>打包进MyProcessor.jar中的javax.annotation.processing.Processor的内容是，注解处理器的合法的全名列表，每一个元素换行分割:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">com.example.MyProcessor</div><div class="line">com.foo.OtherProcessor</div><div class="line">net.blabla.SpecialProcessor</div></pre></td></tr></table></figure>
-<p>把MyProcessor.jar放到你的builpath中，javac会自动检查和读取javax.annotation.processing.Processor中的内容，并且注册MyProcessor作为注解处理器。</p>
-<ul>
-<li>@Target(ElementType.TYPE)   //接口、类、枚举、注解</li>
-<li>@Target(ElementType.FIELD) //字段、枚举的常量</li>
-<li>@Target(ElementType.METHOD) //方法</li>
-<li>@Target(ElementType.PARAMETER) //方法参数</li>
-<li>@Target(ElementType.CONSTRUCTOR)  //构造函数</li>
-<li>@Target(ElementType.LOCAL_VARIABLE)//局部变量</li>
-<li>@Target(ElementType.ANNOTATION_TYPE)//注解</li>
-<li>@Target(ElementType.PACKAGE) ///包   </li>
-</ul>
-
+        
       
     </div>
 
@@ -376,19 +336,13 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Annotation/" rel="tag"># Annotation</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/20/androi全屏显示/" rel="next" title="android全屏显示">
-                <i class="fa fa-chevron-left"></i> android全屏显示
+              <a href="/2017/02/07/优化视频解码渲染/" rel="next" title="优化视频解码渲染">
+                <i class="fa fa-chevron-left"></i> 优化视频解码渲染
               </a>
             
           </div>
@@ -397,8 +351,8 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/21/View之绘制过程/" rel="prev" title="View之绘制过程">
-                View之绘制过程 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/02/27/播放器分析/" rel="prev" title="播放器分析">
+                播放器分析 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -446,17 +400,8 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg"
@@ -512,22 +457,6 @@ init(ProcessingEnvironment env): 这里有一个特殊的init()方法，它会�
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考："><span class="nav-number">1.</span> <span class="nav-text">参考：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AbstractProcessor"><span class="nav-number">1.1.</span> <span class="nav-text">AbstractProcessor</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#注册你的处理器"><span class="nav-number">1.2.</span> <span class="nav-text">注册你的处理器</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
     </div>

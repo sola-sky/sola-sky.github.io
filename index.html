@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Home
           </a>
         </li>
       
@@ -241,7 +241,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2017/02/07/视频解码和渲染/">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2017/02/27/播放器分析/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="sola_sky">
@@ -266,7 +266,326 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/07/视频解码和渲染/" itemprop="url">
+                <a class="post-title-link" href="/2017/02/27/播放器分析/" itemprop="url">
+                  播放器分析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-27T14:36:49+08:00">
+                2017-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这个播放器是基于B站的ijkplayer播放器进行裁剪和改编的，所以可以去下载ijkplayer的源码（ijkplayer播放器其实是基于ffplay进行改写的）。</p>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt=""></p>
+<p>从上图可以看出，这个播放器主要是由三大模块组成，它们分别是音视频解码模块、音视频播放模块、音视频缓存模块。</p>
+<h5 id="1-音视频缓存模块"><a href="#1-音视频缓存模块" class="headerlink" title="1.音视频缓存模块"></a>1.音视频缓存模块</h5><p>音视频缓存主要由两部分组成，一部分是原始数据的缓存，另一部分是经过解码处理后的数据缓存。缓存的作用是用于形成一个异步的生产者消费者模型。下面将分别介绍这两部分。</p>
+<h6 id="原始数据缓存"><a href="#原始数据缓存" class="headerlink" title="原始数据缓存"></a>原始数据缓存</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E5%8E%9F%E5%A7%8B%E7%BC%93%E5%AD%98%E9%83%A8%E5%88%86%E5%9B%BE.png" alt=""></p>
+<p>原始缓存部分由<code>PacketQueue</code>类和<code>MyAVPacketList</code>结构体构成，视频和音频的原始缓存都是这样的结构。</p>
+<p><code>PacketQueue</code>简单介绍一下<code>abort_request_</code>和<code>serial_</code>。其中<code>abort_request_</code>用于控制终止从缓存区取数据或者放入数据，比如当我们需要结束播放时，就需要将这个数据置为1。而<code>serial</code>不仅仅在<code>PacketQueue</code>类中会出现，其它很多类中也都会出现这个成员变量，该成员变量的主要作用是起标记作用，用于判断缓存中的数据是否需要清空丢弃或者其它的由于清空需要重新计算的数据。每当需要清空数据时，<code>PacketQueue</code>中的该变量会自增1，而如果队列中还有数据的话，那么队列中的数据也就是<code>MyAVPacketList</code>的<code>serial</code>将会是自增前的值，因此判断两者不相等，旧数据将会被丢弃而不会被解码。总之<code>serial</code>变量在整个播放器中主要用于判断数据是否过期，需要丢弃或重新计算的作用。</p>
+<p><code>MyAVPacketList</code>类中的<code>pkt</code>用于存储真正的原始数据，<code>next</code>用于指向下一个数据，从中可以看出这是一个链表结构，<code>serial</code>在每次数据被放入队列时都会被赋值为<code>PacketQueue</code>中的<code>serial_</code>的值。</p>
+<h6 id="解码后的数据缓存"><a href="#解码后的数据缓存" class="headerlink" title="解码后的数据缓存"></a>解码后的数据缓存</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E8%A7%A3%E7%A0%81%E5%90%8E%E7%9A%84%E7%BC%93%E5%AD%98%E9%83%A8%E5%88%86%E5%9B%BE.png" alt=""></p>
+<p>解码后的数据缓存主要由<code>FrameQueue</code>和<code>Frame</code>组成。</p>
+<p><code>FrameQueue</code>其中几个成员变量：</p>
+<ul>
+<li><code>queue_</code>，是一个<code>Frame</code>类型的数组，用于存储解码处理后的数据。</li>
+<li><code>rindex_</code>，用于记录该从缓存哪个位置读取数据。</li>
+<li><code>windex_</code>，用于记录该从缓存哪个位置放入新数据。</li>
+</ul>
+<p><code>FrameQueue</code>的几个重要成员函数如下：</p>
+<ul>
+<li><code>FrameQueueWrite()</code>，用于获取相应<code>windex_</code>处的<code>Frame*</code>类型数据，方便把解码后的数据赋值其成员变量。</li>
+<li><code>FrameQueuePush()</code>，将<code>windex_</code>索引加1，移动到下一个位置。</li>
+<li><code>FrameQueuePeek()</code>，获取缓存中的数据用于播放。</li>
+<li><code>FrameQueueNext()</code>，将<code>rindex_</code>索引加1，移动到下一个位置。</li>
+</ul>
+<p>从这里可以看出这里的缓存用了享元模式。</p>
+<p><code>Frame</code>中的一些重要变量：</p>
+<ul>
+<li><code>frame_</code>，用于存储解码后的音频数据（视频缓存时无用）。</li>
+<li><code>bmp_</code>， 用于存储解码后并进行图像格式转换后视频数据(音频缓存时无用)。</li>
+<li><code>pts_</code>，用于表示该帧的显示时间戳（在音视频同步中很重要的一个变量）。</li>
+<li><code>serial_</code>，跟之前在原始数据缓存时介绍的作用一样，其值最终是来自于<code>MyAVPacketList</code>中的<code>serial</code>。</li>
+<li><code>allocated_</code>， 用于判断当前<code>bmp_</code>是否已经有内存分配了（音频缓存时无用）。</li>
+</ul>
+<h5 id="2-音视频解码模块"><a href="#2-音视频解码模块" class="headerlink" title="2.音视频解码模块"></a>2.音视频解码模块</h5><h6 id="解码部分"><a href="#解码部分" class="headerlink" title="解码部分"></a>解码部分</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E8%A7%A3%E7%A0%81%E9%83%A8%E5%88%86%E5%9B%BE.png" alt=""></p>
+<p>音视频的解码主要由<code>Decoder</code>类完成，该类主要的成员变量：</p>
+<ul>
+<li><code>avctx_</code>，这个是FFmpeg中用于解码的一个重要成员。</li>
+<li><code>pkt_serial_</code>，这个是用于记录当前从原始缓存区解码出来的数据的<code>serial</code>，用于对比缓存队列的serial，如果两者不相等，则说明该数据需要丢弃，因为该数据属于需要清空的数据。</li>
+<li><code>packet_pending_</code>，这个用于标记该次数据没有解析完，需要下次再进行解析。</li>
+</ul>
+<p>最重要的成员函数就是<code>DecoderDecodeFrame()</code>函数了，调用该函数就能从原始数据缓存区中取出一个数据然后解码。音频和视频的解码都在这个函数中。</p>
+<h6 id="视频格式转换部分"><a href="#视频格式转换部分" class="headerlink" title="视频格式转换部分"></a>视频格式转换部分</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E5%9B%BE%E5%83%8F%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E9%83%A8%E5%88%86.png" alt=""></p>
+<p>该部分主要的类就是<code>VoutOverlay</code>了，下面介绍一下其成员变量和成员函数：</p>
+<p>成员变量：</p>
+<ul>
+<li>width_：这个宽度代表其图像转换后的宽度。</li>
+<li>height_：这个高度代表其图像转换后的高度。</li>
+<li>format_：这个代表图像最终格式。</li>
+<li>pitches_：用于记录图像格式转换后每一个维度的长度（YUV有三个维度，RGB只有一个）。</li>
+<li>pixels_：用于存储图像格式转换后图像本身的数据。</li>
+</ul>
+<p>成员变量：</p>
+<ul>
+<li><code>ImageConvert()</code>：该函数用于将原始图像格式转换成需要呈现在屏幕上的格式（其内部实现使用了libyuv）</li>
+<li><code>FillFrame()</code>：该函数最终会调用<code>ImageConver()</code>函数，将解码出来的<code>AVFrame</code>数据最终转换成想要的图像格式存储在上述的<code>pixels_</code>中。</li>
+</ul>
+<h5 id="3-音视频播放模块"><a href="#3-音视频播放模块" class="headerlink" title="3.音视频播放模块"></a>3.音视频播放模块</h5><h6 id="时钟部分"><a href="#时钟部分" class="headerlink" title="时钟部分"></a>时钟部分</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E6%92%AD%E6%94%BE%E6%A8%A1%E5%9D%97%E4%B9%8B%E6%97%B6%E9%92%9F.png" alt=""></p>
+<p>时钟部分就一个<code>Clock</code>类，该类用于记录当前视频或者音频播放的时间，主要介绍一下其成员变量：</p>
+<ul>
+<li><code>pts_</code>：用于记录音频或者视频播放的时间，会通过设置时间函数，将视频帧或者音频帧上的显示时间戳赋值给<code>pts_</code>。</li>
+<li><code>pts_drif</code>：用于记录<code>pts_</code>与当前系统时间的差值。</li>
+<li><code>last_updated_</code>：记录当<code>Clock</code>类更新<code>pts_</code>时间时，当前的系统时间。</li>
+</ul>
+<p><code>Clock</code>类是音视频同步时很重要的一个类。</p>
+<h6 id="视频播放部分"><a href="#视频播放部分" class="headerlink" title="视频播放部分"></a>视频播放部分</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E6%92%AD%E6%94%BE%E6%A8%A1%E5%9D%97%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E9%83%A8%E5%88%86.png" alt=""></p>
+<p>在进行一串音视频同步处理后，最终会调用<code>Vout::DisplayOverlay()</code>函数来显示图像。<code>ANativeWindow</code>类型的数据是通过Java层传下来的Surface获取的。</p>
+<h6 id="音频部分"><a href="#音频部分" class="headerlink" title="音频部分"></a>音频部分</h6><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E6%92%AD%E6%94%BE%E6%A8%A1%E5%9D%97%E4%B9%8B%E9%9F%B3%E9%A2%91%E9%83%A8%E5%88%86.png" alt=""></p>
+<p>音频播放部分主要由<code>Aout</code>、<code>Aout_Opaque</code>、<code>AndroidAudioTrack</code>三个类组成。<code>Aout_Opaque::buffer_</code>这个主要用于存储从解码后的缓存区数据中获取的音频数据。下面重点介绍<code>AndroidAudioTrack</code>类。</p>
+<p><code>AndroidAudioTrack</code>的成员变量：</p>
+<ul>
+<li>thiz_：该变量用于存储在Native层创建的Java层的<code>AudioTrack</code>类的对象。</li>
+<li>byte<em>buffer</em>：用于存储经过JNI转化后的音频数据。</li>
+</ul>
+<p><code>AndroidAudioTrack</code>的成员函数：</p>
+<ul>
+<li><code>AndroidAudioTrackWrite()：该函数最终会通过JNI调用Java层的</code>AudioTrack`对象播放声音。</li>
+<li><code>AndroidAudioTrackFree()</code>：最终通过JNI调用释放<code>AudioTrack</code>对象。</li>
+</ul>
+<h4 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h4><h5 id="视频渲染"><a href="#视频渲染" class="headerlink" title="视频渲染"></a>视频渲染</h5><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E6%B8%B2%E6%9F%93%E9%83%A8%E5%88%86%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="渲染时序图"></p>
+<p>该时序图主要展示了从<code>JNI</code>调用相关函数直到创建<code>VideoRefreshThread</code>线程的过程，以及<code>VideoRefreshThread</code>线程内部不断循环刷新视频的过程。</p>
+<h5 id="视频解码"><a href="#视频解码" class="headerlink" title="视频解码"></a>视频解码</h5><h5 id=""><a href="#" class="headerlink" title=""></a><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="解码时序图"></h5><p>该时序图展示了<code>VideoThread</code>线程的创建过程，以及<code>VideoThread</code>线程内部解码、图像格式转换和读写缓存区的过程。音频解码的过程类似，这里就不画出其时序图了。   </p>
+<h5 id="音频播放"><a href="#音频播放" class="headerlink" title="音频播放"></a>音频播放</h5><p><img src="http://okxoqauma.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E5%99%A8%E2%80%94%E2%80%94%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt=""></p>
+<p>该时序图展示了<code>AoutThread</code>线程的创建过程，以及<code>AoutThread</code>线程内部通过<code>AudioCallback()</code>函数获取音频数据，然后最终通过JNI调用Java层的<code>AudioTrack</code>对象播放音频数据的大致流程。 </p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>整个播放器大致就是通过生产者和消费者模型来完成音视频数据的解析和最终播放的，并且通过时间戳来完成音视频的同步。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2017/02/08/音视频的控制/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/08/音视频的控制/" itemprop="url">
+                  音视频的控制
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T10:02:19+08:00">
+                2017-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://solasky.info/2017/02/07/优化视频解码渲染/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="sola_sky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Li's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/07/优化视频解码渲染/" itemprop="url">
                   优化视频解码渲染
                 </a>
               
@@ -281,7 +600,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T09:05:35+08:00">
                 2017-02-07
@@ -426,7 +745,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-06T08:45:24+08:00">
                 2017-02-06
@@ -569,7 +888,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-04T10:54:02+08:00">
                 2017-02-04
@@ -896,7 +1215,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-30T19:34:36+08:00">
                 2016-06-30
@@ -1113,7 +1432,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-30T07:12:50+08:00">
                 2016-06-30
@@ -1251,7 +1570,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-28T19:34:02+08:00">
                 2016-06-28
@@ -1393,7 +1712,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-22T19:03:03+08:00">
                 2016-06-22
@@ -1608,7 +1927,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-21T07:36:13+08:00">
                 2016-06-21
@@ -1694,280 +2013,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/20/java注解处理器学习/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="sola_sky">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Li's Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/20/java注解处理器学习/" itemprop="url">
-                  java注解处理器学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posté le</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T20:53:25+08:00">
-                2016-06-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><ul>
-<li><a href="http://2dxgujun.com/post/2015/06/07/butterknife-analysis.html" target="_blank" rel="external">butterknife 源码分析</a></li>
-<li><a href="https://bxbxbai.github.io/2016/03/12/how-butterknife-works/" target="_blank" rel="external">最新ButterKnife框架原理</a></li>
-<li><a href="http://www.race604.com/annotation-processing/" target="_blank" rel="external">Java注解处理器</a></li>
-</ul>
-<h5 id="AbstractProcessor"><a href="#AbstractProcessor" class="headerlink" title="AbstractProcessor"></a>AbstractProcessor</h5><ul>
-<li><code>init(ProcessingEnvironment env)</code>: 这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Types和Filer。</li>
-<li><code>process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env)</code>: 这相当于每个处理器的主函数main()。你在这里写你的扫描、评估和处理注解的代码，以及生成Java文件。输入参数RoundEnviroment，可以让你查询出包含特定注解的被注解元素。</li>
-</ul>
-<h5 id="注册你的处理器"><a href="#注册你的处理器" class="headerlink" title="注册你的处理器"></a>注册你的处理器</h5><p>你可能会问，我怎样将处理器MyProcessor注册到javac中。你必须提供一个.jar文件。就像其他.jar文件一样，你打包你的注解处理器到此文件中。并且，在你的jar中，你需要打包一个特定的文件javax.annotation.processing.Processor到META-INF/services路径下.<br>打包进MyProcessor.jar中的javax.annotation.processing.Processor的内容是，注解处理器的合法的全名列表，每一个元素换行分割:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">com.example.MyProcessor</div><div class="line">com.foo.OtherProcessor</div><div class="line">net.blabla.SpecialProcessor</div></pre></td></tr></table></figure>
-<p>把MyProcessor.jar放到你的builpath中，javac会自动检查和读取javax.annotation.processing.Processor中的内容，并且注册MyProcessor作为注解处理器。</p>
-<ul>
-<li>@Target(ElementType.TYPE)   //接口、类、枚举、注解</li>
-<li>@Target(ElementType.FIELD) //字段、枚举的常量</li>
-<li>@Target(ElementType.METHOD) //方法</li>
-<li>@Target(ElementType.PARAMETER) //方法参数</li>
-<li>@Target(ElementType.CONSTRUCTOR)  //构造函数</li>
-<li>@Target(ElementType.LOCAL_VARIABLE)//局部变量</li>
-<li>@Target(ElementType.ANNOTATION_TYPE)//注解</li>
-<li>@Target(ElementType.PACKAGE) ///包   </li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://solasky.info/2016/06/20/androi全屏显示/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="sola_sky">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="http://imgsrc.baidu.com/forum/w%3D580/sign=209cc278b019ebc4c0787691b227cf79/9ec6b93eb13533fadb266e33abd3fd1f41345b3d.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Li's Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Li's Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/20/androi全屏显示/" itemprop="url">
-                  android全屏显示
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posté le</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T19:15:25+08:00">
-                2016-06-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="第一种方式"><a href="#第一种方式" class="headerlink" title="第一种方式"></a>第一种方式</h3><p>通过<code>WindowManager.LayoutParams.FLAG_FULLSCREEN</code>来实现全屏功能<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);</div></pre></td></tr></table></figure></p>
-<h3 id="第二种方式"><a href="#第二种方式" class="headerlink" title="第二种方式"></a>第二种方式</h3><p>从3.0版本之后，系统DecorView提供了一个<code>setSystemUiVisibility()</code>方法，可以通过设置Flag改变SystemUI的属性</p>
-<p>从19之后，为<code>setSystemUiVisibility()</code>引入了新的标签<code>SYSTEM_UI_FLAG_IMMERSIVE</code>和<code>SYSTEM_UI_FLAG_IMMERSIVE_STICKY</code>，标签与<code>SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>和<code>SYSTEM_UI_FLAG_FULLSCREEN</code>一起使用的时候可以达到全屏的效果。</p>
-<h6 id="SYSTEM-UI-FLAG-IMMERSIVE"><a href="#SYSTEM-UI-FLAG-IMMERSIVE" class="headerlink" title="SYSTEM_UI_FLAG_IMMERSIVE"></a>SYSTEM_UI_FLAG_IMMERSIVE</h6><p>用户可以通过在边缘区域向内滑动来让系统栏重新显示,并清空<code>SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>和<code>SYSTEM_UI_FLAG_FULLSCREEN</code>标签，还会触发<code>View.OnSystemUiVisibilityChangeListener</code>。系统栏显示后就不会自动隐藏了，必须通过手动设置。</p>
-<h6 id="SYSTEM-UI-FLAG-IMMERSIVE-STICKY"><a href="#SYSTEM-UI-FLAG-IMMERSIVE-STICKY" class="headerlink" title="SYSTEM_UI_FLAG_IMMERSIVE_STICKY"></a>SYSTEM_UI_FLAG_IMMERSIVE_STICKY</h6><p>当使用了SYSTEM_UI_FLAG_IMMERSIVE_STICKY标签的时候，向内滑动的操作会让系统栏临时显示，并处于半透明的状态。此时没有标签会被清除，系统UI可见性监听器也不会被触发。如果用户没有进行操作，系统栏会在一段时间内自动隐藏。因为，因为在这个模式下展示的系统栏是处于暂时(transient)的状态。</p>
-<h6 id="其他一些标签"><a href="#其他一些标签" class="headerlink" title="其他一些标签"></a>其他一些标签</h6><ul>
-<li>View.SYSTEM_UI_FLAG_LAYOUT_STABLE</li>
-<li>View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION</li>
-<li>View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</li>
-</ul>
-<p>标签可以使当系统UI出现时不会导致Activity UI重新layout。</p>
-<p><strong>注意：目前测试发现，当全屏后，按下电源键待机后再点亮屏幕，发现全屏有问题，不会实现全屏，而是没有全屏之前的设置。</strong></p>
-<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><ul>
-<li><a href="http://hukai.me/android-training-course-in-chinese/ui/system-ui/immersive.html" target="_blank" rel="external">全屏沉浸式</a></li>
-<li><a href="http://angeldevil.me/2014/09/02/About-Status-Bar-and-Navigation-Bar/" target="_blank" rel="external">与Status Bar和Navigation Bar相关的一些东西</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2015,8 +2060,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
-                <span class="site-state-item-name">articles</span>
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -2086,7 +2131,7 @@
 </div>
 
 <div class="theme-info">
-  Thème -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>
